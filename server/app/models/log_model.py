@@ -4,9 +4,7 @@ class Log(db.Model):
     uid =               db.Column(db.Integer, primary_key=True)
     timestamp =         db.Column(db.DateTime, nullable=False)
     event =             db.Column(db.String(50), nullable=False)
-    guest_id =          db.Column(db.Integer, db.ForeignKey('guest.uid'), nullable=False)
-
-    guest = db.relationship('Guest', backref=db.backref('logs', lazy=True))
+    guest_id =          db.Column(db.Integer, nullable=False)
 
     def __repr__(self) -> str:
         return f"<Log {self.event}> | {self.timestamp} | {self.guest_id}"

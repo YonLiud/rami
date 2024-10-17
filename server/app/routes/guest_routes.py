@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from ..models import CSO, Guest, Log
 from ..models.log_model import event_types as et
 from ..database import db
+from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import jwt_required
 from datetime import datetime
 
@@ -36,19 +37,22 @@ def get_guest(id_number):
 @jwt_required()
 def create_guest():
     data = request.json
-        # Parse date strings into datetime objects
     try:
-        if 'class_level_expiry' in data:
-            data['class_level_expiry'] = datetime.fromisoformat(data['class_level_expiry'])
-        if 'approval_expiry' in data:
-            data['approval_expiry'] = datetime.fromisoformat(data['approval_expiry'])
-            
+        data['class_level_expiry'] = datetime.fromisoformat(data['class_level_expiry'])
+        data['approval_expiry'] = datetime.fromisoformat(data['approval_expiry'])
+    except ValueError:
+        return jsonify({'err': 'Invalid date format. Use ISO 8601 format.'}), 400
+    try:
         guest = Guest(**data)
         db.session.add(guest)
         db.session.commit()
-        log_event(guest.uid, 'Guest created')
+        log_event(guest.id_number, 'Guest created')
         return jsonify(guest.to_dict()), 201
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({'err': 'A guest with this ID number already exists.'}), 409
     except Exception as e:
+        db.session.rollback()
         return jsonify({'err': str(e)}), 400
 
 # Delete a Guest ( PROTECTED )
@@ -57,10 +61,10 @@ def create_guest():
 def delete_guest(id_number):
     guest = Guest.query.filter_by(id_number=id_number).first()
     if guest:
+        log_event(guest.id_number, et['guest_deleted'])
         db.session.delete(guest)
         db.session.commit()
-        log_event(guest.uid, et['guest_deleted'])
-        return jsonify({'msg': 'Guest deleted'})
+        return jsonify({'msg': 'Guest deleted'}), 204
     return jsonify({'err': 'Guest not found'}), 404
 
 # Mark entry / exit of a Guest
@@ -70,10 +74,10 @@ def mark_guest(id_number):
     if guest:
         if guest.is_inside:
             guest.is_inside = False
-            log_event(guest.uid, et['guest_exit'])
+            log_event(guest.id_number, et['guest_exit'])
         else:
             guest.is_inside = True
-            log_event(guest.uid, et['guest_entry'])
+            log_event(guest.id_number, et['guest_entry'])
         db.session.commit()
         return jsonify(guest.to_dict())
     return jsonify({'err': 'Guest not found'}), 404

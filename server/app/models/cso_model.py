@@ -5,7 +5,7 @@ bcrypt = Bcrypt()
 
 class CSO(db.Model):
     uid =               db.Column(db.Integer, primary_key=True)
-    name =              db.Column(db.String(50), nullable=False)
+    name =              db.Column(db.String(50), nullable=False, unique=True)
     hashed_password =   db.Column(db.String(128), nullable=False)
 
     def __init__(self, name, password):

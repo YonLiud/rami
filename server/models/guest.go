@@ -7,7 +7,7 @@ import (
 type Guest struct {
 	gorm.Model
 	Name             string `json:"name"`
-	ID_Number        string `json:"id" gorm:"unique"`
+	IDNumber         string `json:"idNumber" gorm:"unique"`
 	VehiclePlate     string `json:"vehiclePlate"`
 	Affiliation      string `json:"affiliation"`
 	Inviter          string `json:"inviter"`

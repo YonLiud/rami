@@ -54,12 +54,13 @@ def test_create_guest(access_token, guest_data):
     create_response = create_guest(access_token, guest_data)
     assert create_response.status_code == 201
 
+def test_get_guest(access_token, guest_data):
     retrieved_guest = get_guest(access_token, guest_data['id_number']).json()   
 
     assert retrieved_guest['name'] == guest_data['name']
     assert retrieved_guest['id_number'] == guest_data['id_number']
     assert retrieved_guest['vehicle_plate'] == guest_data['vehicle_plate']
-    assert retrieved_guest['is_inside'] is False  # Ensure the guest is not inside
+    assert retrieved_guest['is_inside'] is False
     assert retrieved_guest['inviter'] == guest_data['inviter']
     assert retrieved_guest['purpose'] == guest_data['purpose']
     assert retrieved_guest['security_response'] == guest_data['security_response']
@@ -69,6 +70,7 @@ def test_create_guest(access_token, guest_data):
     assert retrieved_guest['security_approval'] == guest_data['security_approval']
     assert retrieved_guest['approval_expiry'] == guest_data['approval_expiry']
     assert retrieved_guest['notes'] == guest_data['notes']
+
 
 def test_mark_entry(access_token, guest_data):
     retrieved_guest = get_guest(access_token, guest_data['id_number']).json()

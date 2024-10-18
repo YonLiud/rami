@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from ..models import CSO
 from ..database import db
 from flask_jwt_extended import create_access_token, jwt_required, JWTManager
+from datetime import datetime, timedelta
 
 login_bp = Blueprint('login_bp', __name__)
 jwt = JWTManager()
@@ -17,6 +18,6 @@ def login():
 
     cso = CSO.query.filter_by(name=data['name']).first()
     if cso and cso.check_password(data['password']):
-        access_token = create_access_token(identity=cso.uid)
+        access_token = create_access_token(identity=cso.uid, fresh=True)
         return jsonify(access_token=access_token), 200
     return jsonify({'err': 'Bad username or password'}), 401

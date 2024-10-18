@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type Log struct {
 	gorm.Model
-	Event   string `json:"action"`
-	GuestID string `json:"guest"`
+	Event     string `json:"action"`
+	GuestID   string `json:"guest"`
+	Timestamp string `json:"timestamp"`
 }

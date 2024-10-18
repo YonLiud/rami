@@ -11,7 +11,7 @@ import (
 
 var DB *gorm.DB
 
-func InitDB() {
+func InitDB() error {
 	var err error
 	DB, err = gorm.Open(sqlite.Open("rami.db"), &gorm.Config{})
 	if err != nil {
@@ -22,4 +22,7 @@ func InitDB() {
 	if err != nil {
 		log.Fatal("Failed to migrate database: ", err)
 	}
+
+	log.Println("Connected to database")
+	return nil
 }

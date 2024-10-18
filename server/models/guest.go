@@ -13,10 +13,11 @@ type Guest struct {
 	Inviter          string `json:"inviter"`
 	Purpose          string `json:"purpose"`
 	SecurityResp     string `json:"security"`
-	EntryApproved    string `json:"entry"`
+	EntryApproved    bool   `json:"entry"`
 	SecurityClear    string `json:"securityClear"`
 	SecurityClearExp string `json:"securityClearExp"`
-	SecurityMgrAppr  string `json:"securityMgrAppr"`
+	SecurityMgrAppr  bool   `json:"securityMgrAppr"`
 	ApprovalExp      string `json:"approvalExp"`
 	Notes            string `json:"notes"`
+	IsInside         bool   `json:"isInside"`
 }

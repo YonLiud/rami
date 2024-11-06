@@ -99,15 +99,21 @@ func TestGetLogsBySerial(t *testing.T) {
 	}
 
 	// pick 3 random logs and set their serial to randomSerial
-	for i := 0; i < 3; i++ {
-		randomInt := generateRandomInt(0, 9)
-		demoLogs[randomInt].Serial = randomSerial
+	serialSet := make(map[int]struct{})
+	for len(serialSet) < 3 { // Ensure we select 3 unique logs
+		randomInt := generateRandomInt(0, len(demoLogs)-1) // Ensure within bounds
+		serialSet[randomInt] = struct{}{}                  // Add index to the set (unique)
+	}
+
+	// Assign the serial to the selected logs
+	for index := range serialSet {
+		demoLogs[index].Serial = randomSerial
 	}
 
 	for i := 0; i < len(demoLogs); i++ {
 		err := CreateLog(&demoLogs[i])
 		if err != nil {
-			t.Errorf("Error creating log: %v", err)
+			t.Errorf("Error creating log %d: %v", i, err)
 		}
 	}
 
@@ -118,6 +124,7 @@ func TestGetLogsBySerial(t *testing.T) {
 
 	if len(logs) != 3 {
 		t.Errorf("Expected 3 logs, got %d", len(logs))
+		t.FailNow()
 	}
 
 	for i := 0; i < 3; i++ {
@@ -126,5 +133,3 @@ func TestGetLogsBySerial(t *testing.T) {
 		}
 	}
 }
-
-

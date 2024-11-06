@@ -2,6 +2,7 @@ package database
 
 import (
 	"log"
+	"rami/models"
 	"sync"
 
 	"gorm.io/driver/sqlite"
@@ -13,7 +14,6 @@ var (
 	once sync.Once
 )
 
-// InitDB initializes the database connection using Gorm
 func InitDB() *gorm.DB {
 	once.Do(func() {
 		var err error
@@ -22,14 +22,16 @@ func InitDB() *gorm.DB {
 			log.Fatalf("Failed to connect to the database: %v", err)
 		}
 
-		// AutoMigrate your models here
-		db.AutoMigrate(&models.Guest{}) // AutoMigrate the Guest model
+		// Migrate models
+		db.AutoMigrate(&models.Visitor{})
+		db.AutoMigrate(&models.Log{})
+		db.AutoMigrate(&models.CSO{})
+
 		log.Println("Database connection established and models migrated")
 	})
 	return db
 }
 
-// GetDB returns the singleton instance of the database
 func GetDB() *gorm.DB {
 	return db
 }

@@ -20,3 +20,11 @@ func CreateVisitor(Visitor *models.Visitor) (err error) {
 	}
 	return nil
 }
+
+func GetVisitorByCredentialsNumber(CredentialsNumber string) (Visitor models.Visitor, err error) {
+	db := database.GetDB()
+	if err := db.Where("credentials_number = ?", CredentialsNumber).First(&Visitor).Error; err != nil {
+		return Visitor, err
+	}
+	return Visitor, nil
+}

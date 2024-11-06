@@ -14,10 +14,10 @@ var (
 	once sync.Once
 )
 
-func InitDB() *gorm.DB {
+func InitDB(dbName string) *gorm.DB {
 	once.Do(func() {
 		var err error
-		db, err = gorm.Open(sqlite.Open("./data.db"), &gorm.Config{})
+		db, err = gorm.Open(sqlite.Open(dbName), &gorm.Config{})
 		if err != nil {
 			log.Fatalf("Failed to connect to the database: %v", err)
 		}

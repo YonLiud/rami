@@ -11,6 +11,7 @@ import (
 
 func InitiateTestDB() *gorm.DB {
 	db := database.InitDB(":memory:")
+	// db := database.InitDB("test.db")
 
 	db.Exec("DELETE FROM visitors;")
 	db.Exec("DELETE FROM logs;")
@@ -32,7 +33,10 @@ func generateRandomString(length int) string {
 	return result.String()
 }
 
-func RandomChoice(options []string) string {
-	rand.Seed(time.Now().UnixNano())        // Seed the random number generator
+func generateRandomChoice(options []string) string {
 	return options[rand.Intn(len(options))] // Select a random index
+}
+
+func generateRandomInt(min int, max int) int {
+	return rand.Intn(max-min) + min
 }

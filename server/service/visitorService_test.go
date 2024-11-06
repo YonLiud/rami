@@ -3,27 +3,32 @@ package service
 import (
 	"rami/models"
 	"testing"
+
+	"github.com/brianvoe/gofakeit"
 )
 
-var demoVisitor = models.Visitor{
-	Name:                    "John Doe",
-	CredentialsNumber:       "ABC123456",
-	CredentialType:          "passport",
-	VehiclePlate:            "XYZ 1234",
-	Association:             "Acme Corporation",
-	Inviter:                 "Jane Smith",
-	Purpose:                 "Meeting",
-	EntryApproval:           true,
-	EntryExpriry:            1691908800,
-	SecurityResponse:        "Full body scan",
-	ClearanceLevel:          "High",
-	ClearanceExpiry:         1692513600,
-	SecurityOfficerApproval: true,
-	Notes:                   "Special instructions: escort required",
+func GenerateRandomVisitor() models.Visitor {
+	return models.Visitor{
+		Name:                    gofakeit.Name(),                                           // Random Name
+		CredentialsNumber:       generateRandomString(10),                                  // Random Credentials Number
+		CredentialType:          generateRandomChoice([]string{"ID", "Passport", "Hoger"}), // Random Credential Type
+		VehiclePlate:            generateRandomString(7),                                   // Random Vehicle Plate
+		Association:             gofakeit.Company(),                                        // Random Company
+		Inviter:                 gofakeit.Name(),                                           // Random Inviter
+		Purpose:                 gofakeit.Sentence(3),                                      // Random Purpose
+		EntryApproval:           true,                                                      // Fixed value
+		EntryExpriry:            generateRandomTimestamp(),                                 // Random Timestamp
+		SecurityResponse:        "Full body scan",                                          // Fixed value
+		ClearanceLevel:          "High",                                                    // Fixed value
+		ClearanceExpiry:         generateRandomTimestamp(),                                 // Random Timestamp
+		SecurityOfficerApproval: true,                                                      // Fixed value
+		Notes:                   gofakeit.Sentence(5),                                      // Random Notes
+	}
 }
 
 func TestCreateVisitor(t *testing.T) {
 	InitiateTestDB()
+	demoVisitor := GenerateRandomVisitor()
 
 	err := CreateVisitor(&demoVisitor)
 	if err != nil {
@@ -41,6 +46,7 @@ func TestCreateVisitor(t *testing.T) {
 
 func TestGetAllVisitors(t *testing.T) {
 	InitiateTestDB()
+	demoVisitor := GenerateRandomVisitor()
 
 	err := CreateVisitor(&demoVisitor)
 	if err != nil {
@@ -71,8 +77,10 @@ func TestGetAllVisitors(t *testing.T) {
 
 func TestGetVisitorByCredentialsNumber(t *testing.T) {
 	InitiateTestDB()
+	demoVisitor := GenerateRandomVisitor()
 
 	err := CreateVisitor(&demoVisitor)
+
 	if err != nil {
 		t.Errorf("Error creating visitor: %v", err)
 	}

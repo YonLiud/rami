@@ -21,10 +21,10 @@ func GetAllLogs() (logs []models.Log, err error) {
 	return logs, nil
 }
 
-func GetLogBySerial(serial int) (log models.Log, err error) {
+func GetLogsBySerial(serial string) (logs []models.Log, err error) {
 	db := database.GetDB()
-	if err := db.First(&log, serial).Error; err != nil {
-		return log, err
+	if err := db.Where("serial = ?", serial).Find(&logs).Error; err != nil {
+		return nil, err
 	}
-	return log, nil
+	return logs, nil
 }

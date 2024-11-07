@@ -1,11 +1,12 @@
 package database
 
 import (
+	"os"
 	"testing"
 )
 
 func TestInitDB(t *testing.T) {
-	db := InitDB(":memory:")
+	db := InitDB("test.db")
 
 	if db == nil {
 		t.Fatalf("Expected database connection to be established, got nil")
@@ -24,12 +25,16 @@ func TestInitDB(t *testing.T) {
 	if !db.Migrator().HasTable("csos") {
 		t.Errorf("Expected 'csos' table to be created, but it wasn't")
 	}
+
+	os.Remove("test.db")
 }
 
 func TestGetDB(t *testing.T) {
-	db := InitDB(":memory:")
+	db := InitDB("test.db")
 
 	if db != GetDB() {
 		t.Errorf("Expected GetDB() to return the same database connection, but it didn't")
 	}
+
+	os.Remove("test.db")
 }

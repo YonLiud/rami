@@ -1,15 +1,25 @@
 package services
 
 import (
+	"errors"
 	"log"
-	"rami/database"
 	"rami/models"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-func HashPassword(password string) (string, error) {
+type CSOService struct {
+	DB *gorm.DB
+}
+
+// NewCSOService creates a new instance of CSOService
+func NewCSOService(db *gorm.DB) *CSOService {
+	return &CSOService{DB: db}
+}
+
+// HashPassword hashes a plain password for secure storage
+func (s *CSOService) HashPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", err
@@ -17,7 +27,8 @@ func HashPassword(password string) (string, error) {
 	return string(hashedPassword), nil
 }
 
-func ComparePasswords(hashedPassword string, password string) bool {
+// ComparePasswords compares a hashed password with a plain password
+func (s *CSOService) ComparePasswords(hashedPassword, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	if err != nil {
 		log.Println(err)
@@ -26,40 +37,38 @@ func ComparePasswords(hashedPassword string, password string) bool {
 	return true
 }
 
-func DeactivateCSO(username string) error {
-	db := database.GetDB()
-
-	cso, err := GetCSOByUsername(username)
+// DeactivateCSO sets the active status of a CSO to false
+func (s *CSOService) DeactivateCSO(username string) error {
+	cso, err := s.GetCSOByUsername(username)
 	if err != nil {
 		return err
 	}
-
 	cso.Active = false
-	return db.Save(&cso).Error
+	return s.DB.Save(&cso).Error
 }
 
-func ActivateCSO(username string) error {
-	db := database.GetDB()
-
-	cso, err := GetCSOByUsername(username)
+// ActivateCSO sets the active status of a CSO to true
+func (s *CSOService) ActivateCSO(username string) error {
+	cso, err := s.GetCSOByUsername(username)
 	if err != nil {
 		return err
 	}
-
 	cso.Active = true
-	return db.Save(&cso).Error
+	return s.DB.Save(&cso).Error
 }
 
-func CreateCSO(username string, password string) error {
-	db := database.GetDB()
-
+// CreateCSO creates a new CSO record in the database
+func (s *CSOService) CreateCSO(username, password string) error {
 	var existingCSO models.CSO
-	err := db.Where("username = ?", username).First(&existingCSO).Error
-	if err != gorm.ErrRecordNotFound {
+	err := s.DB.Where("username = ?", username).First(&existingCSO).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return err
+	}
+	if err == nil {
 		return models.ErrUsernameExists
 	}
 
-	hashedPassword, err := HashPassword(password)
+	hashedPassword, err := s.HashPassword(password)
 	if err != nil {
 		return err
 	}
@@ -69,34 +78,31 @@ func CreateCSO(username string, password string) error {
 		HashedPassword: hashedPassword,
 		Active:         true,
 	}
-
-	return db.Create(&cso).Error
+	return s.DB.Create(&cso).Error
 }
 
-func GetCSOByUsername(username string) (models.CSO, error) {
-	db := database.GetDB()
-
+// GetCSOByUsername retrieves a CSO by username
+func (s *CSOService) GetCSOByUsername(username string) (models.CSO, error) {
 	var cso models.CSO
-	err := db.Where("username = ?", username).First(&cso).Error
+	err := s.DB.Where("username = ?", username).First(&cso).Error
 	if err != nil {
 		return cso, err
 	}
 	return cso, nil
 }
 
-func GetAllActiveCSOs() ([]models.CSO, error) {
-	db := database.GetDB()
-
+// GetAllActiveCSOs retrieves all active CSOs
+func (s *CSOService) GetAllActiveCSOs() ([]models.CSO, error) {
 	var csos []models.CSO
-	err := db.Where("active = ?", true).Find(&csos).Error
+	err := s.DB.Where("active = ?", true).Find(&csos).Error
 	return csos, err
 }
 
-func AuthenticateCSO(username, password string) (bool, error) {
-	// check if the user exists
-	cso, err := GetCSOByUsername(username)
+// AuthenticateCSO verifies the CSO's credentials
+func (s *CSOService) AuthenticateCSO(username, password string) (bool, error) {
+	cso, err := s.GetCSOByUsername(username)
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, models.ErrInvalidCredentials
 		}
 		return false, err
@@ -106,7 +112,7 @@ func AuthenticateCSO(username, password string) (bool, error) {
 		return false, models.ErrCSOInactive
 	}
 
-	if ComparePasswords(cso.HashedPassword, password) {
+	if s.ComparePasswords(cso.HashedPassword, password) {
 		return true, nil
 	}
 

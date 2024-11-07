@@ -5,110 +5,107 @@ import (
 	"testing"
 )
 
+var csoService *CSOService
+
+func InitiateCSOTest() {
+	testDB = InitiateTestDB()
+	csoService = NewCSOService(testDB)
+}
+
 func TestHashPassword(t *testing.T) {
 	password := generateRandomString(8)
-	hashedPassword, err := HashPassword(password)
+	hashedPassword, err := csoService.HashPassword(password)
 	if err != nil {
 		t.Errorf("Error hashing password: %v", err)
 	}
 	if hashedPassword == password {
-		t.Errorf("Hashed password is the same as the password")
+		t.Errorf("Hashed password should not match the original password")
 	}
 }
 
 func TestComparePasswords(t *testing.T) {
 	password := generateRandomString(8)
-	hashedPassword, err := HashPassword(password)
+	hashedPassword, err := csoService.HashPassword(password)
 	if err != nil {
 		t.Errorf("Error hashing password: %v", err)
 	}
 
-	if !ComparePasswords(hashedPassword, password) {
-		t.Errorf("Passwords should match")
+	if !csoService.ComparePasswords(hashedPassword, password) {
+		t.Errorf("Password comparison failed; the hashed and original passwords should match")
 	}
 }
 
 func TestCreateCSO(t *testing.T) {
-	InitiateTestDB()
+	InitiateCSOTest()
 
 	username := generateRandomString(10)
 	password := generateRandomString(8)
-	err := CreateCSO(username, password)
+	err := csoService.CreateCSO(username, password)
 	if err != nil {
-		t.Errorf("Error creating CSO: %v", err)
-		t.FailNow()
+		t.Fatalf("Error creating CSO: %v", err)
 	}
 
-	cso, err := GetCSOByUsername(username)
+	cso, err := csoService.GetCSOByUsername(username)
 	if err != nil {
-		t.Errorf("Error getting CSO by username: %v", err)
+		t.Fatalf("Error retrieving CSO by username: %v", err)
 	}
 	if cso.Username != username {
-		t.Errorf("Username does not match")
+		t.Errorf("Expected username %s, got %s", username, cso.Username)
 	}
 
-	if !ComparePasswords(cso.HashedPassword, password) {
-		t.Errorf("Passwords should match")
+	if !csoService.ComparePasswords(cso.HashedPassword, password) {
+		t.Errorf("Stored password does not match the original password")
 	}
 }
 
 func TestAuthenticateCSO(t *testing.T) {
-	InitiateTestDB()
+	InitiateCSOTest()
 
 	username := generateRandomString(8)
 	password := generateRandomString(8)
 
-	err := CreateCSO(username, password)
+	err := csoService.CreateCSO(username, password)
 	if err != nil {
-		t.Errorf("Error creating CSO: %v", err)
+		t.Fatalf("Error creating CSO: %v", err)
 	}
 
-	valid, err := AuthenticateCSO(username, password)
-	if err != nil {
-		t.Errorf("Error authenticating CSO: %v", err)
-	}
-	if !valid {
-		t.Errorf("Authentication should succeed with correct password")
+	// Test valid credentials
+	valid, err := csoService.AuthenticateCSO(username, password)
+	if err != nil || !valid {
+		t.Errorf("Authentication failed with correct credentials")
 	}
 
+	// Test invalid password
 	invalidPassword := generateRandomString(9)
-	_, err = AuthenticateCSO(username, invalidPassword)
-	if err != nil {
-		if err != models.ErrInvalidCredentials {
-			t.Errorf("Error authenticating CSO: %v", err)
-		}
-	} else {
-		t.Errorf("Authentication should fail with incorrect password")
+	_, err = csoService.AuthenticateCSO(username, invalidPassword)
+	if err != models.ErrInvalidCredentials {
+		t.Errorf("Expected error for incorrect password, got %v", err)
 	}
 
+	// Test invalid username
 	invalidUsername := generateRandomString(9)
-	_, err = AuthenticateCSO(invalidUsername, password)
-	if err != nil {
-		if err != models.ErrInvalidCredentials {
-			t.Errorf("Error authenticating CSO: %v", err)
-			t.FailNow()
-		}
-	} else {
-		t.Errorf("Authentication should fail with incorrect username")
-
+	_, err = csoService.AuthenticateCSO(invalidUsername, password)
+	if err != models.ErrInvalidCredentials {
+		t.Errorf("Expected error for incorrect username, got %v", err)
 	}
 
-	DeactivateCSO(username)
-	_, err = AuthenticateCSO(username, password)
+	// Test deactivated CSO
+	err = csoService.DeactivateCSO(username)
 	if err != nil {
-		if err != models.ErrCSOInactive {
-			t.Errorf("Error authenticating CSO: %v", err)
-		}
-	} else {
-		t.Errorf("Authentication should fail with deactivated CSO")
+		t.Errorf("Error deactivating CSO: %v", err)
+	}
+	_, err = csoService.AuthenticateCSO(username, password)
+	if err != models.ErrCSOInactive {
+		t.Errorf("Expected error for deactivated CSO, got %v", err)
 	}
 
-	ActivateCSO(username)
-	valid, err = AuthenticateCSO(username, password)
+	// Reactivate CSO and verify authentication
+	err = csoService.ActivateCSO(username)
 	if err != nil {
-		t.Errorf("Error authenticating CSO: %v", err)
+		t.Errorf("Error reactivating CSO: %v", err)
 	}
-	if !valid {
-		t.Errorf("Authentication should succeed with activated CSO")
+	valid, err = csoService.AuthenticateCSO(username, password)
+	if err != nil || !valid {
+		t.Errorf("Authentication should succeed for reactivated CSO")
 	}
 }

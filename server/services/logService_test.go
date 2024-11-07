@@ -11,7 +11,7 @@ var testDB *gorm.DB
 var logService *LogService
 
 // Initialize the test database and LogService instance
-func InitiateTest() {
+func InitiateLogTest() {
 	testDB = InitiateTestDB()
 	logService = NewLogService(testDB)
 }
@@ -33,7 +33,7 @@ func GenerateRandomLogForSerial(serial string) models.Log {
 }
 
 func TestCreateLog(t *testing.T) {
-	InitiateTest()
+	InitiateLogTest()
 	demoLog := GenerateRandomLog()
 
 	err := logService.CreateLog(&demoLog) // Call the method on logService
@@ -60,7 +60,7 @@ func TestCreateLog(t *testing.T) {
 }
 
 func TestGetAllLogs(t *testing.T) {
-	InitiateTest()
+	InitiateLogTest()
 
 	// Array of 5 random logs
 	var demoLogs []models.Log
@@ -99,7 +99,7 @@ func TestGetAllLogs(t *testing.T) {
 }
 
 func TestGetLogsBySerial(t *testing.T) {
-	InitiateTest()
+	InitiateLogTest()
 
 	randomSerial := generateRandomString(10)
 

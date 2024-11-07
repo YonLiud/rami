@@ -27,15 +27,17 @@ func GenerateRandomVisitor() models.Visitor {
 }
 
 func TestCreateVisitor(t *testing.T) {
-	InitiateTestDB()
+	db := InitiateTestDB()
+	visitorService := NewVisitorService(db) // Create an instance of VisitorService
+
 	demoVisitor := GenerateRandomVisitor()
 
-	err := CreateVisitor(&demoVisitor)
+	err := visitorService.CreateVisitor(&demoVisitor) // Use the service instance
 	if err != nil {
 		t.Errorf("Error creating visitor: %v", err)
 	}
 
-	visitor, err := GetVisitorByCredentialsNumber(demoVisitor.CredentialsNumber)
+	visitor, err := visitorService.GetVisitorByCredentialsNumber(demoVisitor.CredentialsNumber) // Use the service instance
 	if err != nil {
 		t.Errorf("Error retrieving visitor: %v", err)
 	}
@@ -45,15 +47,17 @@ func TestCreateVisitor(t *testing.T) {
 }
 
 func TestGetAllVisitors(t *testing.T) {
-	InitiateTestDB()
+	db := InitiateTestDB()
+	visitorService := NewVisitorService(db) // Create an instance of VisitorService
+
 	demoVisitor := GenerateRandomVisitor()
 
-	err := CreateVisitor(&demoVisitor)
+	err := visitorService.CreateVisitor(&demoVisitor) // Use the service instance
 	if err != nil {
 		t.Errorf("Error creating visitor: %v", err)
 	}
 
-	visitors, err := GetAllVisitors()
+	visitors, err := visitorService.GetAllVisitors() // Use the service instance
 	if err != nil {
 		t.Errorf("Error retrieving visitors: %v", err)
 	}
@@ -76,16 +80,17 @@ func TestGetAllVisitors(t *testing.T) {
 }
 
 func TestGetVisitorByCredentialsNumber(t *testing.T) {
-	InitiateTestDB()
+	db := InitiateTestDB()
+	visitorService := NewVisitorService(db) // Create an instance of VisitorService
+
 	demoVisitor := GenerateRandomVisitor()
 
-	err := CreateVisitor(&demoVisitor)
-
+	err := visitorService.CreateVisitor(&demoVisitor) // Use the service instance
 	if err != nil {
 		t.Errorf("Error creating visitor: %v", err)
 	}
 
-	visitor, err := GetVisitorByCredentialsNumber(demoVisitor.CredentialsNumber)
+	visitor, err := visitorService.GetVisitorByCredentialsNumber(demoVisitor.CredentialsNumber) // Use the service instance
 	if err != nil {
 		t.Errorf("Error retrieving visitor: %v", err)
 	}

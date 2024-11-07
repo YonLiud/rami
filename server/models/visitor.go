@@ -19,5 +19,6 @@ type Visitor struct {
 	ClearanceLevel          string `json:"clearanceLevel"`          // security clearance level
 	ClearanceExpiry         int    `json:"clearanceExpiry"`         // security clearance expiry UNIX
 	SecurityOfficerApproval bool   `json:"securityOfficerApproval"` // security officer approval in MOD
-	Notes                   string `json:"notes"`                   // additional notes
+	Notes                   string `json:"notes"`
+	IsInside                bool   `json:"isInside"` // is the visitor inside the premises
 }

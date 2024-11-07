@@ -1,29 +1,42 @@
 package services
 
 import (
-	"rami/database"
 	"rami/models"
+
+	"gorm.io/gorm"
 )
 
-func CreateLog(log *models.Log) (err error) {
-	db := database.GetDB()
-	if err := db.Create(log).Error; err != nil {
+// LogService provides methods to work with logs in the database
+type LogService struct {
+	DB *gorm.DB
+}
+
+// NewLogService creates a new instance of LogService
+func NewLogService(db *gorm.DB) *LogService {
+	return &LogService{DB: db}
+}
+
+// CreateLog saves a new log entry to the database
+func (s *LogService) CreateLog(log *models.Log) error {
+	if err := s.DB.Create(log).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetAllLogs() (logs []models.Log, err error) {
-	db := database.GetDB()
-	if err := db.Find(&logs).Error; err != nil {
+// GetAllLogs retrieves all logs from the database
+func (s *LogService) GetAllLogs() ([]models.Log, error) {
+	var logs []models.Log
+	if err := s.DB.Find(&logs).Error; err != nil {
 		return nil, err
 	}
 	return logs, nil
 }
 
-func GetLogsBySerial(serial string) (logs []models.Log, err error) {
-	db := database.GetDB()
-	if err := db.Where("serial = ?", serial).Find(&logs).Error; err != nil {
+// GetLogsBySerial retrieves logs based on a specific serial from the database
+func (s *LogService) GetLogsBySerial(serial string) ([]models.Log, error) {
+	var logs []models.Log
+	if err := s.DB.Where("serial = ?", serial).Find(&logs).Error; err != nil {
 		return nil, err
 	}
 	return logs, nil

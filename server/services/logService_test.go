@@ -3,34 +3,45 @@ package services
 import (
 	"rami/models"
 	"testing"
+
+	"gorm.io/gorm"
 )
+
+var testDB *gorm.DB
+var logService *LogService
+
+// Initialize the test database and LogService instance
+func InitiateTest() {
+	testDB = InitiateTestDB()
+	logService = NewLogService(testDB)
+}
 
 func GenerateRandomLog() models.Log {
 	return models.Log{
-		Serial:    generateRandomString(10),                        // Random Serial (e.g., "mG522mmhPb")
-		Event:     generateRandomChoice([]string{"Entry", "Exit"}), // Random Event (either "Entry" or "Exit")
-		Timestamp: generateRandomTimestamp(),                       // Random Timestamp
+		Serial:    generateRandomString(10),
+		Event:     generateRandomChoice([]string{"Entry", "Exit"}),
+		Timestamp: generateRandomTimestamp(),
 	}
 }
 
 func GenerateRandomLogForSerial(serial string) models.Log {
 	return models.Log{
-		Serial:    serial,                                          // Fixed Serial
-		Event:     generateRandomChoice([]string{"Entry", "Exit"}), // Random Event (either "Entry" or "Exit")
-		Timestamp: generateRandomTimestamp(),                       // Random Timestamp
+		Serial:    serial,
+		Event:     generateRandomChoice([]string{"Entry", "Exit"}),
+		Timestamp: generateRandomTimestamp(),
 	}
 }
 
 func TestCreateLog(t *testing.T) {
-	InitiateTestDB()
+	InitiateTest()
 	demoLog := GenerateRandomLog()
 
-	err := CreateLog(&demoLog)
+	err := logService.CreateLog(&demoLog) // Call the method on logService
 	if err != nil {
 		t.Errorf("Error creating log: %v", err)
 	}
 
-	logs, err := GetLogsBySerial(demoLog.Serial)
+	logs, err := logService.GetLogsBySerial(demoLog.Serial) // Use logService instance
 	if err != nil {
 		t.Errorf("Error retrieving log: %v", err)
 	}
@@ -49,23 +60,23 @@ func TestCreateLog(t *testing.T) {
 }
 
 func TestGetAllLogs(t *testing.T) {
-	InitiateTestDB()
+	InitiateTest()
 
-	// array of 5 random logs
+	// Array of 5 random logs
 	var demoLogs []models.Log
 	for i := 0; i < 5; i++ {
 		demoLogs = append(demoLogs, GenerateRandomLog())
 	}
 
-	// create each log
+	// Create each log using logService
 	for i := 0; i < len(demoLogs); i++ {
-		err := CreateLog(&demoLogs[i])
+		err := logService.CreateLog(&demoLogs[i])
 		if err != nil {
 			t.Errorf("Error creating log: %v", err)
 		}
 	}
 
-	logs, err := GetAllLogs()
+	logs, err := logService.GetAllLogs()
 	if err != nil {
 		t.Errorf("Error retrieving logs: %v", err)
 	}
@@ -88,21 +99,21 @@ func TestGetAllLogs(t *testing.T) {
 }
 
 func TestGetLogsBySerial(t *testing.T) {
-	InitiateTestDB()
+	InitiateTest()
 
 	randomSerial := generateRandomString(10)
 
-	// array of 10 random logs
+	// Array of 10 random logs
 	var demoLogs []models.Log
 	for i := 0; i < 10; i++ {
 		demoLogs = append(demoLogs, GenerateRandomLog())
 	}
 
-	// pick 3 random logs and set their serial to randomSerial
+	// Pick 3 random logs and set their serial to randomSerial
 	serialSet := make(map[int]struct{})
 	for len(serialSet) < 3 { // Ensure we select 3 unique logs
-		randomInt := generateRandomInt(0, len(demoLogs)-1) // Ensure within bounds
-		serialSet[randomInt] = struct{}{}                  // Add index to the set (unique)
+		randomInt := generateRandomInt(0, len(demoLogs)-1)
+		serialSet[randomInt] = struct{}{} // Add index to the set (unique)
 	}
 
 	// Assign the serial to the selected logs
@@ -111,13 +122,13 @@ func TestGetLogsBySerial(t *testing.T) {
 	}
 
 	for i := 0; i < len(demoLogs); i++ {
-		err := CreateLog(&demoLogs[i])
+		err := logService.CreateLog(&demoLogs[i])
 		if err != nil {
 			t.Errorf("Error creating log %d: %v", i, err)
 		}
 	}
 
-	logs, err := GetLogsBySerial(randomSerial)
+	logs, err := logService.GetLogsBySerial(randomSerial)
 	if err != nil {
 		t.Errorf("Error retrieving logs: %v", err)
 	}

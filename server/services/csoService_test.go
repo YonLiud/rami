@@ -14,7 +14,7 @@ func InitiateCSOTest() {
 }
 
 func TestHashPassword(t *testing.T) {
-	password := generateRandomString(8)
+	password := utils.GenerateRandomString(8)
 	hashedPassword, err := csoService.HashPassword(password)
 	if err != nil {
 		t.Errorf("Error hashing password: %v", err)
@@ -25,7 +25,7 @@ func TestHashPassword(t *testing.T) {
 }
 
 func TestComparePasswords(t *testing.T) {
-	password := generateRandomString(8)
+	password := utils.GenerateRandomString(8)
 	hashedPassword, err := csoService.HashPassword(password)
 	if err != nil {
 		t.Errorf("Error hashing password: %v", err)
@@ -39,8 +39,8 @@ func TestComparePasswords(t *testing.T) {
 func TestCreateCSO(t *testing.T) {
 	InitiateCSOTest()
 
-	username := generateRandomString(10)
-	password := generateRandomString(8)
+	username := utils.GenerateRandomString(10)
+	password := utils.GenerateRandomString(8)
 	err := csoService.CreateCSO(username, password)
 	if err != nil {
 		t.Fatalf("Error creating CSO: %v", err)
@@ -62,8 +62,8 @@ func TestCreateCSO(t *testing.T) {
 func TestAuthenticateCSO(t *testing.T) {
 	InitiateCSOTest()
 
-	username := generateRandomString(8)
-	password := generateRandomString(8)
+	username := utils.GenerateRandomString(8)
+	password := utils.GenerateRandomString(8)
 
 	err := csoService.CreateCSO(username, password)
 	if err != nil {
@@ -77,14 +77,14 @@ func TestAuthenticateCSO(t *testing.T) {
 	}
 
 	// Test invalid password
-	invalidPassword := generateRandomString(9)
+	invalidPassword := utils.GenerateRandomString(9)
 	_, err = csoService.AuthenticateCSO(username, invalidPassword)
 	if err != models.ErrInvalidCredentials {
 		t.Errorf("Expected error for incorrect password, got %v", err)
 	}
 
 	// Test invalid username
-	invalidUsername := generateRandomString(9)
+	invalidUsername := utils.GenerateRandomString(9)
 	_, err = csoService.AuthenticateCSO(invalidUsername, password)
 	if err != models.ErrInvalidCredentials {
 		t.Errorf("Expected error for incorrect username, got %v", err)

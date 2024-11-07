@@ -41,3 +41,29 @@ func (vs *VisitorService) GetVisitorByCredentialsNumber(credentialsNumber string
 	}
 	return visitor, nil
 }
+
+// MarkExit marks the exit of a visitor by updating the exit timestamp
+func (vs *VisitorService) MarkExit(visitor *models.Visitor) error {
+	visitor.IsInside = false
+	if err := vs.DB.Save(visitor).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarkEntry marks the entry of a visitor by updating the entry timestamp
+func (vs *VisitorService) MarkEntry(visitor *models.Visitor) error {
+	visitor.IsInside = true
+	if err := vs.DB.Save(visitor).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// UpdateVisitor updates the visitor record in the database
+func (vs *VisitorService) UpdateVisitor(visitor *models.Visitor) error {
+	if err := vs.DB.Save(visitor).Error; err != nil {
+		return err
+	}
+	return nil
+}

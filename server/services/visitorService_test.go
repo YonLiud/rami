@@ -1,12 +1,9 @@
 package services
 
 import (
-	"rami/models"
 	"testing"
 
 	"rami/utils"
-
-	"github.com/brianvoe/gofakeit"
 )
 
 var visitorService *VisitorService
@@ -16,29 +13,10 @@ func InitiateVisitorTest() {
 	visitorService = NewVisitorService(testDB)
 }
 
-func GenerateRandomVisitor() models.Visitor {
-	return models.Visitor{
-		Name:                    gofakeit.Name(),                                           // Random Name
-		CredentialsNumber:       generateRandomString(10),                                  // Random Credentials Number
-		CredentialType:          generateRandomChoice([]string{"ID", "Passport", "Hoger"}), // Random Credential Type
-		VehiclePlate:            generateRandomString(7),                                   // Random Vehicle Plate
-		Association:             gofakeit.Company(),                                        // Random Company
-		Inviter:                 gofakeit.Name(),                                           // Random Inviter
-		Purpose:                 gofakeit.Sentence(3),                                      // Random Purpose
-		EntryApproval:           true,                                                      // Fixed value
-		EntryExpriry:            generateRandomTimestamp(),                                 // Random Timestamp
-		SecurityResponse:        "Full body scan",                                          // Fixed value
-		ClearanceLevel:          "High",                                                    // Fixed value
-		ClearanceExpiry:         generateRandomTimestamp(),                                 // Random Timestamp
-		SecurityOfficerApproval: true,                                                      // Fixed value
-		Notes:                   gofakeit.Sentence(5),                                      // Random Notes
-	}
-}
-
 func TestCreateVisitor(t *testing.T) {
 	InitiateVisitorTest()
 
-	demoVisitor := GenerateRandomVisitor()
+	demoVisitor := utils.GenerateRandomVisitor()
 	err := visitorService.CreateVisitor(&demoVisitor)
 	if err != nil {
 		t.Fatalf("Error creating visitor: %v", err)
@@ -56,7 +34,7 @@ func TestCreateVisitor(t *testing.T) {
 func TestGetAllVisitors(t *testing.T) {
 	InitiateVisitorTest()
 
-	demoVisitor := GenerateRandomVisitor()
+	demoVisitor := utils.GenerateRandomVisitor()
 	err := visitorService.CreateVisitor(&demoVisitor)
 	if err != nil {
 		t.Fatalf("Error creating visitor: %v", err)
@@ -87,7 +65,7 @@ func TestGetAllVisitors(t *testing.T) {
 func TestGetVisitorByCredentialsNumber(t *testing.T) {
 	InitiateVisitorTest()
 
-	demoVisitor := GenerateRandomVisitor()
+	demoVisitor := utils.GenerateRandomVisitor()
 	err := visitorService.CreateVisitor(&demoVisitor)
 	if err != nil {
 		t.Fatalf("Error creating visitor: %v", err)

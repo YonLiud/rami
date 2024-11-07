@@ -20,17 +20,17 @@ func InitiateLogTest() {
 
 func GenerateRandomLog() models.Log {
 	return models.Log{
-		Serial:    generateRandomString(10),
-		Event:     generateRandomChoice([]string{"Entry", "Exit"}),
-		Timestamp: generateRandomTimestamp(),
+		Serial:    utils.GenerateRandomString(10),
+		Event:     utils.GenerateRandomChoice([]string{"Entry", "Exit"}),
+		Timestamp: utils.GenerateRandomTimestamp(),
 	}
 }
 
 func GenerateRandomLogForSerial(serial string) models.Log {
 	return models.Log{
 		Serial:    serial,
-		Event:     generateRandomChoice([]string{"Entry", "Exit"}),
-		Timestamp: generateRandomTimestamp(),
+		Event:     utils.GenerateRandomChoice([]string{"Entry", "Exit"}),
+		Timestamp: utils.GenerateRandomTimestamp(),
 	}
 }
 
@@ -103,7 +103,7 @@ func TestGetAllLogs(t *testing.T) {
 func TestGetLogsBySerial(t *testing.T) {
 	InitiateLogTest()
 
-	randomSerial := generateRandomString(10)
+	randomSerial := utils.GenerateRandomString(10)
 
 	// Array of 10 random logs
 	var demoLogs []models.Log
@@ -114,7 +114,7 @@ func TestGetLogsBySerial(t *testing.T) {
 	// Pick 3 random logs and set their serial to randomSerial
 	serialSet := make(map[int]struct{})
 	for len(serialSet) < 3 { // Ensure we select 3 unique logs
-		randomInt := generateRandomInt(0, len(demoLogs)-1)
+		randomInt := utils.GenerateRandomInt(0, len(demoLogs)-1)
 		serialSet[randomInt] = struct{}{} // Add index to the set (unique)
 	}
 

@@ -2,22 +2,9 @@ package services
 
 import (
 	"math/rand"
-	"rami/database"
 	"strings"
 	"time"
-
-	"gorm.io/gorm"
 )
-
-func InitiateTestDB() *gorm.DB {
-	db := database.InitDB(":memory:")
-
-	db.Exec("DELETE FROM visitors;")
-	db.Exec("DELETE FROM logs;")
-	db.Exec("DELETE FROM csos;")
-
-	return db
-}
 
 func generateRandomTimestamp() int {
 	return int(time.Now().Unix()) + rand.Intn(1000000)

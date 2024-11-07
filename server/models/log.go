@@ -1,8 +1,14 @@
 package models
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
+
+func GetCurrentTimestamp() int {
+	return int(time.Now().Unix())
+}
 
 type Log struct {
 	gorm.Model

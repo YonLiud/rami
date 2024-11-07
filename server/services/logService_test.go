@@ -4,6 +4,8 @@ import (
 	"rami/models"
 	"testing"
 
+	"rami/utils"
+
 	"gorm.io/gorm"
 )
 
@@ -12,7 +14,7 @@ var logService *LogService
 
 // Initialize the test database and LogService instance
 func InitiateLogTest() {
-	testDB = InitiateTestDB()
+	testDB = utils.InitiateTestDB()
 	logService = NewLogService(testDB)
 }
 

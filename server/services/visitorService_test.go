@@ -4,13 +4,15 @@ import (
 	"rami/models"
 	"testing"
 
+	"rami/utils"
+
 	"github.com/brianvoe/gofakeit"
 )
 
 var visitorService *VisitorService
 
 func InitiateVisitorTest() {
-	testDB := InitiateTestDB()
+	testDB := utils.InitiateTestDB()
 	visitorService = NewVisitorService(testDB)
 }
 

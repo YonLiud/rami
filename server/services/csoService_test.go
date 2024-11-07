@@ -2,13 +2,14 @@ package services
 
 import (
 	"rami/models"
+	"rami/utils"
 	"testing"
 )
 
 var csoService *CSOService
 
 func InitiateCSOTest() {
-	testDB = InitiateTestDB()
+	testDB = utils.InitiateTestDB()
 	csoService = NewCSOService(testDB)
 }
 

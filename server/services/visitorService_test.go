@@ -7,6 +7,13 @@ import (
 	"github.com/brianvoe/gofakeit"
 )
 
+var visitorService *VisitorService
+
+func InitiateVisitorTest() {
+	testDB := InitiateTestDB()
+	visitorService = NewVisitorService(testDB)
+}
+
 func GenerateRandomVisitor() models.Visitor {
 	return models.Visitor{
 		Name:                    gofakeit.Name(),                                           // Random Name
@@ -27,39 +34,35 @@ func GenerateRandomVisitor() models.Visitor {
 }
 
 func TestCreateVisitor(t *testing.T) {
-	db := InitiateTestDB()
-	visitorService := NewVisitorService(db) // Create an instance of VisitorService
+	InitiateVisitorTest()
 
 	demoVisitor := GenerateRandomVisitor()
-
-	err := visitorService.CreateVisitor(&demoVisitor) // Use the service instance
+	err := visitorService.CreateVisitor(&demoVisitor)
 	if err != nil {
-		t.Errorf("Error creating visitor: %v", err)
+		t.Fatalf("Error creating visitor: %v", err)
 	}
 
-	visitor, err := visitorService.GetVisitorByCredentialsNumber(demoVisitor.CredentialsNumber) // Use the service instance
+	visitor, err := visitorService.GetVisitorByCredentialsNumber(demoVisitor.CredentialsNumber)
 	if err != nil {
-		t.Errorf("Error retrieving visitor: %v", err)
+		t.Fatalf("Error retrieving visitor: %v", err)
 	}
 	if visitor.Name != demoVisitor.Name {
-		t.Errorf("Retrieved visitor name: got %v, want %v", visitor.Name, demoVisitor.Name)
+		t.Errorf("Expected name %s, got %s", demoVisitor.Name, visitor.Name)
 	}
 }
 
 func TestGetAllVisitors(t *testing.T) {
-	db := InitiateTestDB()
-	visitorService := NewVisitorService(db) // Create an instance of VisitorService
+	InitiateVisitorTest()
 
 	demoVisitor := GenerateRandomVisitor()
-
-	err := visitorService.CreateVisitor(&demoVisitor) // Use the service instance
+	err := visitorService.CreateVisitor(&demoVisitor)
 	if err != nil {
-		t.Errorf("Error creating visitor: %v", err)
+		t.Fatalf("Error creating visitor: %v", err)
 	}
 
-	visitors, err := visitorService.GetAllVisitors() // Use the service instance
+	visitors, err := visitorService.GetAllVisitors()
 	if err != nil {
-		t.Errorf("Error retrieving visitors: %v", err)
+		t.Fatalf("Error retrieving visitors: %v", err)
 	}
 
 	if len(visitors) < 1 {
@@ -80,26 +83,23 @@ func TestGetAllVisitors(t *testing.T) {
 }
 
 func TestGetVisitorByCredentialsNumber(t *testing.T) {
-	db := InitiateTestDB()
-	visitorService := NewVisitorService(db) // Create an instance of VisitorService
+	InitiateVisitorTest()
 
 	demoVisitor := GenerateRandomVisitor()
-
-	err := visitorService.CreateVisitor(&demoVisitor) // Use the service instance
+	err := visitorService.CreateVisitor(&demoVisitor)
 	if err != nil {
-		t.Errorf("Error creating visitor: %v", err)
+		t.Fatalf("Error creating visitor: %v", err)
 	}
 
-	visitor, err := visitorService.GetVisitorByCredentialsNumber(demoVisitor.CredentialsNumber) // Use the service instance
+	visitor, err := visitorService.GetVisitorByCredentialsNumber(demoVisitor.CredentialsNumber)
 	if err != nil {
-		t.Errorf("Error retrieving visitor: %v", err)
+		t.Fatalf("Error retrieving visitor: %v", err)
 	}
 
 	if visitor.CredentialsNumber != demoVisitor.CredentialsNumber {
-		t.Errorf("Retrieved visitor's credentials number: got %v, want %v", visitor.CredentialsNumber, demoVisitor.CredentialsNumber)
+		t.Errorf("Expected credentials number %s, got %s", demoVisitor.CredentialsNumber, visitor.CredentialsNumber)
 	}
-
 	if visitor.Name != demoVisitor.Name {
-		t.Errorf("Retrieved visitor name: got %v, want %v", visitor.Name, demoVisitor.Name)
+		t.Errorf("Expected name %s, got %s", demoVisitor.Name, visitor.Name)
 	}
 }

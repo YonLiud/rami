@@ -10,8 +10,7 @@ import (
 )
 
 func InitiateTestDB() *gorm.DB {
-	// db := database.InitDB(":memory:")
-	db := database.InitDB("test.db")
+	db := database.InitDB(":memory:")
 
 	db.Exec("DELETE FROM visitors;")
 	db.Exec("DELETE FROM logs;")

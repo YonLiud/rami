@@ -26,7 +26,17 @@ func TestInitDB(t *testing.T) {
 		t.Errorf("Expected 'csos' table to be created, but it wasn't")
 	}
 
+	sqlDB, err := db.DB()
+	if err != nil {
+		t.Fatalf("Failed to get underlying database connection: %v", err)
+	}
+	sqlDB.Close()
+
 	os.Remove("test.db")
+	if _, err := os.Stat("test.db"); err == nil {
+		t.Errorf("Expected database file to be removed, but it wasn't")
+	}
+
 }
 
 func TestGetDB(t *testing.T) {
@@ -36,5 +46,15 @@ func TestGetDB(t *testing.T) {
 		t.Errorf("Expected GetDB() to return the same database connection, but it didn't")
 	}
 
+	sqlDB, err := db.DB()
+	if err != nil {
+		t.Fatalf("Failed to get underlying database connection: %v", err)
+	}
+	sqlDB.Close()
+
 	os.Remove("test.db")
+	if _, err := os.Stat("test.db"); err == nil {
+		t.Errorf("Expected database file to be removed, but it wasn't")
+	}
+
 }

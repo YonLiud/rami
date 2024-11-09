@@ -45,6 +45,16 @@ func (vc *VisitorController) CreateVisitorHandler(w http.ResponseWriter, r *http
 
 	if err := vc.VisitorService.CreateVisitor(&visitor); err != nil {
 		log.Printf("Failed to create visitor: %v", err)
+
+		if err.Error() == "UNIQUE constraint failed: visitors.credentials_number" {
+			http.Error(w, "Credentials number is already in use", http.StatusBadRequest)
+			return
+		}
+
+		if err.Error() == "NOT NULL constraint failed: visitors.credentials_number" {
+			http.Error(w, "Credentials number is required", http.StatusUnprocessableEntity)
+		}
+
 		http.Error(w, "Failed to create visitor", http.StatusInternalServerError)
 		return
 	}

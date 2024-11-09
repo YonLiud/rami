@@ -63,6 +63,28 @@ func TestCreateBadVisitorTest(t *testing.T) {
 	rr := httptest.NewRecorder()
 	visitorRouter.ServeHTTP(rr, req)
 
+	if status := rr.Code; status != http.StatusUnprocessableEntity {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusUnprocessableEntity)
+	}
+}
+
+func TestCreateExistingVisitor(t *testing.T) {
+	initVisitorControllerTest()
+
+	visitorReq := utils.GenerateRandomVisitor()
+	secondVisitorReq := utils.GenerateRandomVisitor()
+
+	secondVisitorReq.CredentialsNumber = visitorReq.CredentialsNumber
+	visitorService.CreateVisitor(&visitorReq)
+
+	body, _ := json.Marshal(secondVisitorReq)
+	req, err := http.NewRequest("POST", "/visitors", bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	visitorRouter.ServeHTTP(rr, req)
+
 	if status := rr.Code; status != http.StatusBadRequest {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusBadRequest)
 	}

@@ -13,12 +13,10 @@ type CSOService struct {
 	DB *gorm.DB
 }
 
-// NewCSOService creates a new instance of CSOService
 func NewCSOService(db *gorm.DB) *CSOService {
 	return &CSOService{DB: db}
 }
 
-// HashPassword hashes a plain password for secure storage
 func (s *CSOService) HashPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -27,7 +25,6 @@ func (s *CSOService) HashPassword(password string) (string, error) {
 	return string(hashedPassword), nil
 }
 
-// ComparePasswords compares a hashed password with a plain password
 func (s *CSOService) ComparePasswords(hashedPassword, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	if err != nil {
@@ -37,7 +34,6 @@ func (s *CSOService) ComparePasswords(hashedPassword, password string) bool {
 	return true
 }
 
-// DeactivateCSO sets the active status of a CSO to false
 func (s *CSOService) DeactivateCSO(username string) error {
 	cso, err := s.GetCSOByUsername(username)
 	if err != nil {
@@ -47,7 +43,6 @@ func (s *CSOService) DeactivateCSO(username string) error {
 	return s.DB.Save(&cso).Error
 }
 
-// ActivateCSO sets the active status of a CSO to true
 func (s *CSOService) ActivateCSO(username string) error {
 	cso, err := s.GetCSOByUsername(username)
 	if err != nil {
@@ -57,7 +52,6 @@ func (s *CSOService) ActivateCSO(username string) error {
 	return s.DB.Save(&cso).Error
 }
 
-// CreateCSO creates a new CSO record in the database
 func (s *CSOService) CreateCSO(username, password string) error {
 	var existingCSO models.CSO
 	err := s.DB.Where("username = ?", username).First(&existingCSO).Error
@@ -81,7 +75,6 @@ func (s *CSOService) CreateCSO(username, password string) error {
 	return s.DB.Create(&cso).Error
 }
 
-// GetCSOByUsername retrieves a CSO by username
 func (s *CSOService) GetCSOByUsername(username string) (models.CSO, error) {
 	var cso models.CSO
 	err := s.DB.Where("username = ?", username).First(&cso).Error
@@ -91,14 +84,12 @@ func (s *CSOService) GetCSOByUsername(username string) (models.CSO, error) {
 	return cso, nil
 }
 
-// GetAllActiveCSOs retrieves all active CSOs
 func (s *CSOService) GetAllActiveCSOs() ([]models.CSO, error) {
 	var csos []models.CSO
 	err := s.DB.Where("active = ?", true).Find(&csos).Error
 	return csos, err
 }
 
-// AuthenticateCSO verifies the CSO's credentials
 func (s *CSOService) AuthenticateCSO(username, password string) (bool, error) {
 	cso, err := s.GetCSOByUsername(username)
 	if err != nil {

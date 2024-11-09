@@ -117,7 +117,7 @@ func (vc *VisitorController) UpdateVisitorHandler(w http.ResponseWriter, r *http
 	w.WriteHeader(http.StatusOK)
 }
 
-func (vc *VisitorController) MarkEntryHandler(w http.ResponseWriter, r *http.Request) {
+func (vc *VisitorController) MarkEntryExitHandler(w http.ResponseWriter, r *http.Request) {
 	credentialsNumber := mux.Vars(r)["credentialsNumber"]
 
 	if credentialsNumber == "" {
@@ -136,47 +136,10 @@ func (vc *VisitorController) MarkEntryHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	if visitor.IsInside {
-		http.Error(w, "Visitor is already inside", http.StatusBadRequest)
-		return
-	}
-
-	if err := vc.VisitorService.MarkEntry(&visitor); err != nil {
-		log.Printf("Failed to mark entry: %v", err)
-		http.Error(w, "Failed to mark entry", http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-}
-
-func (vc *VisitorController) MarkExitHandler(w http.ResponseWriter, r *http.Request) {
-	credentialsNumber := mux.Vars(r)["credentialsNumber"]
-
-	if credentialsNumber == "" {
-		http.Error(w, "Credentials number is required", http.StatusBadRequest)
-		return
-	}
-
-	visitor, err := vc.VisitorService.GetVisitorByCredentialsNumber(credentialsNumber)
-	if err != nil {
-		log.Printf("Failed to retrieve visitor: %v", err)
-		http.Error(w, "Failed to retrieve visitor", http.StatusInternalServerError)
-		return
-	}
-
-	if !visitor.IsInside {
-		http.Error(w, "Visitor is already outside", http.StatusBadRequest)
-		return
-	}
-
-	if err := vc.VisitorService.MarkExit(&visitor); err != nil {
-		log.Printf("Failed to mark exit: %v", err)
-		if err.Error() == "record not found" {
-			http.Error(w, "Visitor not found", http.StatusNotFound)
-			return
-		}
-		http.Error(w, "Failed to mark exit", http.StatusInternalServerError)
+	visitor.IsInside = !visitor.IsInside
+	if err := vc.VisitorService.UpdateVisitor(&visitor); err != nil {
+		log.Printf("Failed to update visitor: %v", err)
+		http.Error(w, "Failed to update visitor", http.StatusInternalServerError)
 		return
 	}
 

@@ -28,8 +28,7 @@ func initVisitorControllerTest() {
 	visitorRouter.HandleFunc("/visitors", visitorController.GetAllVisitorsHandler).Methods("GET")
 	visitorRouter.HandleFunc("/visitors/{credentialsNumber}", visitorController.GetVisitorByCredentialsNumberHandler).Methods("GET")
 	visitorRouter.HandleFunc("/visitors/{credentialsNumber}", visitorController.UpdateVisitorHandler).Methods("PUT")
-	visitorRouter.HandleFunc("/visitors/{credentialsNumber}", visitorController.MarkEntryHandler).Methods("PATCH")
-	visitorRouter.HandleFunc("/visitors/{credentialsNumber}", visitorController.MarkExitHandler).Methods("PATCH")
+	visitorRouter.HandleFunc("/visitors/{credentialsNumber}", visitorController.MarkEntryExitHandler).Methods("PATCH")
 }
 
 func TestCreateVisitorHandler(t *testing.T) {
@@ -223,7 +222,7 @@ func TestNonExistantUpdateVisitorHandler(t *testing.T) {
 	}
 }
 
-func TestMarkEntryHandler(t *testing.T) {
+func TestMarkEntryExitHandler(t *testing.T) {
 	initVisitorControllerTest()
 
 	visitor := utils.GenerateRandomVisitor()
@@ -245,9 +244,26 @@ func TestMarkEntryHandler(t *testing.T) {
 	if !retrievedVisitor.IsInside {
 		t.Errorf("Expected visitor to be inside, got outside")
 	}
+
+	req, err = http.NewRequest("PATCH", "/visitors/"+visitor.CredentialsNumber, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr = httptest.NewRecorder()
+	visitorRouter.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+
+	retrievedVisitor, _ = visitorService.GetVisitorByCredentialsNumber(visitor.CredentialsNumber)
+
+	if retrievedVisitor.IsInside {
+		t.Errorf("Expected visitor to be outside, got inside")
+	}
 }
 
-func TestNonExistantMarkEntryHandler(t *testing.T) {
+func TestNonExistantMarkEntryExitHandler(t *testing.T) {
 	initVisitorControllerTest()
 
 	req, err := http.NewRequest("PATCH", "/visitors/123", nil)

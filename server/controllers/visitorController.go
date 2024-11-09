@@ -73,6 +73,12 @@ func (vc *VisitorController) GetVisitorByCredentialsNumberHandler(w http.Respons
 	visitor, err := vc.VisitorService.GetVisitorByCredentialsNumber(credentialsNumber)
 	if err != nil {
 		log.Printf("Failed to retrieve visitor: %v", err)
+
+		if err.Error() == "record not found" {
+			http.Error(w, "Visitor not found", http.StatusNotFound)
+			return
+		}
+
 		http.Error(w, "Failed to retrieve visitor", http.StatusInternalServerError)
 		return
 	}
@@ -92,6 +98,13 @@ func (vc *VisitorController) UpdateVisitorHandler(w http.ResponseWriter, r *http
 	var visitor models.Visitor
 	if err := json.NewDecoder(r.Body).Decode(&visitor); err != nil {
 		http.Error(w, "Invalid request payload, "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	_, err := vc.VisitorService.GetVisitorByCredentialsNumber(credentialsNumber)
+	if err != nil {
+		log.Printf("Failed to retrieve visitor: %v", err)
+		http.Error(w, "Visitor not found", http.StatusNotFound)
 		return
 	}
 

@@ -9,6 +9,7 @@ import (
 	"rami/services"
 	"rami/utils"
 	"testing"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -170,3 +171,54 @@ func TestNonExistantGetVisitorByCredentialsNumberHandler(t *testing.T) {
 	}
 }
 
+func TestUpdateVisitorHandler(t *testing.T) {
+	initVisitorControllerTest()
+
+	visitor := utils.GenerateRandomVisitor()
+	visitorService.CreateVisitor(&visitor)
+
+	visitor.Name = "Updated Name"
+	visitor.VehiclePlate = "Updated Vehicle Plate"
+
+	body, _ := json.Marshal(visitor)
+	req, err := http.NewRequest("PUT", "/visitors/"+visitor.CredentialsNumber, bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	visitorRouter.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+
+	retrievedVisitor, _ := visitorService.GetVisitorByCredentialsNumber(visitor.CredentialsNumber)
+
+	//? RESET UPDATED TIME AND CREATED TIME BECAUSE THEY ARE NOT EQUAL
+	visitor.CreatedAt = time.Time{}
+	visitor.UpdatedAt = time.Time{}
+	retrievedVisitor.CreatedAt = time.Time{}
+	retrievedVisitor.UpdatedAt = time.Time{}
+
+	if visitor != retrievedVisitor {
+		t.Errorf("Expected visitor 《 %v 》, got 《 %v 》", visitor, retrievedVisitor)
+	}
+}
+
+func TestNonExistantUpdateVisitorHandler(t *testing.T) {
+	initVisitorControllerTest()
+
+	visitor := utils.GenerateRandomVisitor()
+
+	body, _ := json.Marshal(visitor)
+	req, err := http.NewRequest("PUT", "/visitors/"+visitor.CredentialsNumber, bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	visitorRouter.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusNotFound {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusNotFound)
+	}
+}

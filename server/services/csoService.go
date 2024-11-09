@@ -72,24 +72,26 @@ func (s *CSOService) GetAllActiveCSOs() ([]models.CSO, error) {
 	return csos, err
 }
 
-func (s *CSOService) AuthenticateCSO(username, password string) (bool, error) {
+func (s *CSOService) AuthenticateCSO(username, password string) (string, error) {
 	cso, err := s.GetCSOByUsername(username)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, models.ErrInvalidCredentials
+			return "", models.ErrInvalidCredentials
 		}
-		return false, err
+		return "", err
 	}
 
 	if !cso.Active {
-		return false, models.ErrCSOInactive
+		return "", models.ErrInactiveCSO
 	}
 
-	if s.ComparePasswords(cso.HashedPassword, password) {
-		return true, nil
+	if !s.ComparePasswords(cso.HashedPassword, password) {
+		return "", models.ErrInvalidCredentials
 	}
 
-	return false, models.ErrInvalidCredentials
+	// TODO: Implement JWT
+
+	return "TOKEN", nil
 }
 
 func (s *CSOService) DeactivateCSO(username string) error {

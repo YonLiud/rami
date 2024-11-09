@@ -128,6 +128,10 @@ func (vc *VisitorController) MarkEntryHandler(w http.ResponseWriter, r *http.Req
 	visitor, err := vc.VisitorService.GetVisitorByCredentialsNumber(credentialsNumber)
 	if err != nil {
 		log.Printf("Failed to retrieve visitor: %v", err)
+		if err.Error() == "record not found" {
+			http.Error(w, "Visitor not found", http.StatusNotFound)
+			return
+		}
 		http.Error(w, "Failed to retrieve visitor", http.StatusInternalServerError)
 		return
 	}
@@ -168,6 +172,10 @@ func (vc *VisitorController) MarkExitHandler(w http.ResponseWriter, r *http.Requ
 
 	if err := vc.VisitorService.MarkExit(&visitor); err != nil {
 		log.Printf("Failed to mark exit: %v", err)
+		if err.Error() == "record not found" {
+			http.Error(w, "Visitor not found", http.StatusNotFound)
+			return
+		}
 		http.Error(w, "Failed to mark exit", http.StatusInternalServerError)
 		return
 	}

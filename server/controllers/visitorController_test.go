@@ -222,3 +222,42 @@ func TestNonExistantUpdateVisitorHandler(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusNotFound)
 	}
 }
+
+func TestMarkEntryHandler(t *testing.T) {
+	initVisitorControllerTest()
+
+	visitor := utils.GenerateRandomVisitor()
+	visitorService.CreateVisitor(&visitor)
+
+	req, err := http.NewRequest("PATCH", "/visitors/"+visitor.CredentialsNumber, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	visitorRouter.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+
+	retrievedVisitor, _ := visitorService.GetVisitorByCredentialsNumber(visitor.CredentialsNumber)
+
+	if !retrievedVisitor.IsInside {
+		t.Errorf("Expected visitor to be inside, got outside")
+	}
+}
+
+func TestNonExistantMarkEntryHandler(t *testing.T) {
+	initVisitorControllerTest()
+
+	req, err := http.NewRequest("PATCH", "/visitors/123", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	visitorRouter.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusNotFound {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusNotFound)
+	}
+}

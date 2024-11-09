@@ -16,17 +16,17 @@ import (
 
 var logService *services.LogService
 var logController *LogController
-var router *mux.Router
+var logRouter *mux.Router
 
 func initLogControllerTest() {
 	testDB := utils.InitiateTestDB()
 	logService = services.NewLogService(testDB)
 	logController = NewLogController(logService)
 
-	router = mux.NewRouter()
-	router.HandleFunc("/logs", logController.CreateLogHandler).Methods("POST")
-	router.HandleFunc("/logs/{serial}", logController.SearchLogsBySerialHandler).Methods("GET")
-	router.HandleFunc("/logs", logController.GetAllLogsHandler).Methods("GET")
+	logRouter = mux.NewRouter()
+	logRouter.HandleFunc("/logs", logController.CreateLogHandler).Methods("POST")
+	logRouter.HandleFunc("/logs/{serial}", logController.SearchLogsBySerialHandler).Methods("GET")
+	logRouter.HandleFunc("/logs", logController.GetAllLogsHandler).Methods("GET")
 }
 
 func TestCreateLogHandler(t *testing.T) {
@@ -34,7 +34,7 @@ func TestCreateLogHandler(t *testing.T) {
 
 	logReq := map[string]string{
 		"serial": gofakeit.UUID(),
-		"level":  gofakeit.Word(),
+		"event":  gofakeit.Word(),
 	}
 	body, _ := json.Marshal(logReq)
 	req, err := http.NewRequest("POST", "/logs", bytes.NewBuffer(body))
@@ -42,7 +42,7 @@ func TestCreateLogHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
-	router.ServeHTTP(rr, req)
+	logRouter.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusCreated {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusCreated)
@@ -66,7 +66,7 @@ func TestSearchLogsBySerialHandler(t *testing.T) {
 		t.Fatalf("Error creating request: %v", err)
 	}
 	rr := httptest.NewRecorder()
-	router.ServeHTTP(rr, req)
+	logRouter.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
 		t.Fatalf("Expected status code %d, got %d", http.StatusOK, rr.Code)
@@ -90,7 +90,7 @@ func TestGetAllLogsHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
-	router.ServeHTTP(rr, req)
+	logRouter.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusNoContent {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusNoContent)
@@ -113,7 +113,7 @@ func TestGetAllLogsHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr = httptest.NewRecorder()
-	router.ServeHTTP(rr, req)
+	logRouter.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)

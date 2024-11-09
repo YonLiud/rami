@@ -34,24 +34,6 @@ func (s *CSOService) ComparePasswords(hashedPassword, password string) bool {
 	return true
 }
 
-func (s *CSOService) DeactivateCSO(username string) error {
-	cso, err := s.GetCSOByUsername(username)
-	if err != nil {
-		return err
-	}
-	cso.Active = false
-	return s.DB.Save(&cso).Error
-}
-
-func (s *CSOService) ActivateCSO(username string) error {
-	cso, err := s.GetCSOByUsername(username)
-	if err != nil {
-		return err
-	}
-	cso.Active = true
-	return s.DB.Save(&cso).Error
-}
-
 func (s *CSOService) CreateCSO(username, password string) error {
 	var existingCSO models.CSO
 	err := s.DB.Where("username = ?", username).First(&existingCSO).Error
@@ -108,4 +90,22 @@ func (s *CSOService) AuthenticateCSO(username, password string) (bool, error) {
 	}
 
 	return false, models.ErrInvalidCredentials
+}
+
+func (s *CSOService) DeactivateCSO(username string) error {
+	cso, err := s.GetCSOByUsername(username)
+	if err != nil {
+		return err
+	}
+	cso.Active = false
+	return s.DB.Save(&cso).Error
+}
+
+func (s *CSOService) ActivateCSO(username string) error {
+	cso, err := s.GetCSOByUsername(username)
+	if err != nil {
+		return err
+	}
+	cso.Active = true
+	return s.DB.Save(&cso).Error
 }

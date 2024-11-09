@@ -18,23 +18,6 @@ func NewVisitorController(visitorService *services.VisitorService) *VisitorContr
 	return &VisitorController{VisitorService: visitorService}
 }
 
-func (vc *VisitorController) GetAllVisitorsHandler(w http.ResponseWriter, r *http.Request) {
-	visitors, err := vc.VisitorService.GetAllVisitors()
-	if err != nil {
-		log.Printf("Failed to retrieve visitors: %v", err)
-		http.Error(w, "Failed to retrieve visitors", http.StatusInternalServerError)
-		return
-	}
-
-	if len(visitors) == 0 {
-		w.WriteHeader(http.StatusNoContent)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(visitors)
-}
-
 func (vc *VisitorController) CreateVisitorHandler(w http.ResponseWriter, r *http.Request) {
 	var visitor models.Visitor
 
@@ -60,6 +43,40 @@ func (vc *VisitorController) CreateVisitorHandler(w http.ResponseWriter, r *http
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func (vc *VisitorController) GetAllVisitorsHandler(w http.ResponseWriter, r *http.Request) {
+	visitors, err := vc.VisitorService.GetAllVisitors()
+	if err != nil {
+		log.Printf("Failed to retrieve visitors: %v", err)
+		http.Error(w, "Failed to retrieve visitors", http.StatusInternalServerError)
+		return
+	}
+
+	if len(visitors) == 0 {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(visitors)
+}
+
+func (vc *VisitorController) GetAllVisitorsInsideHandler(w http.ResponseWriter, r *http.Request) {
+	visitors, err := vc.VisitorService.GetAllVisitorsInside()
+	if err != nil {
+		log.Printf("Failed to retrieve visitors: %v", err)
+		http.Error(w, "Failed to retrieve visitors", http.StatusInternalServerError)
+		return
+	}
+
+	if len(visitors) == 0 {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(visitors)
 }
 
 func (vc *VisitorController) GetVisitorByCredentialsNumberHandler(w http.ResponseWriter, r *http.Request) {
@@ -136,7 +153,7 @@ func (vc *VisitorController) MarkEntryExitHandler(w http.ResponseWriter, r *http
 		return
 	}
 
-	visitor.IsInside = !visitor.IsInside
+	visitor.Inside = !visitor.Inside
 	if err := vc.VisitorService.UpdateVisitor(&visitor); err != nil {
 		log.Printf("Failed to update visitor: %v", err)
 		http.Error(w, "Failed to update visitor", http.StatusInternalServerError)

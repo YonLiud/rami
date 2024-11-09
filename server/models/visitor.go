@@ -20,5 +20,5 @@ type Visitor struct {
 	ClearanceExpiry         int    `json:"clearanceExpiry" gorm:"not null"`                             // security clearance expiry UNIX
 	SecurityOfficerApproval bool   `json:"securityOfficerApproval" gorm:"not null"`                     // security officer approval in MOD
 	Notes                   string `json:"notes" gorm:"not null"`
-	IsInside                bool   `json:"isInside" gorm:"not null"` // is the visitor inside the premises
+	Inside                  bool   `json:"inside" gorm:"not null"` // is the visitor inside the premises
 }

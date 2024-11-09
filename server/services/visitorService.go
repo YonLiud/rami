@@ -22,6 +22,14 @@ func (vs *VisitorService) GetAllVisitors() ([]models.Visitor, error) {
 	return visitors, nil
 }
 
+func (vs *VisitorService) GetAllVisitorsInside() ([]models.Visitor, error) {
+	var visitors []models.Visitor
+	if err := vs.DB.Where("inside = ?", true).Find(&visitors).Error; err != nil {
+		return nil, err
+	}
+	return visitors, nil
+}
+
 func (vs *VisitorService) CreateVisitor(visitor *models.Visitor) error {
 	if err := vs.DB.Create(visitor).Error; err != nil {
 		return err

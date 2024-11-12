@@ -61,6 +61,33 @@ func TestCreateLog(t *testing.T) {
 	}
 }
 
+func TestCreateLogHelper(t *testing.T) {
+	InitiateLogTest()
+	demoLog := GenerateRandomLog()
+
+	err := logService.CreateLogHelper(demoLog.Event, demoLog.Serial)
+	if err != nil {
+		t.Errorf("Error creating log: %v", err)
+	}
+
+	logs, err := logService.GetLogsBySerial(demoLog.Serial)
+	if err != nil {
+		t.Errorf("Error retrieving log: %v", err)
+	}
+
+	log := logs[0]
+
+	if log.Serial != demoLog.Serial {
+		t.Errorf("Expected serial %s, got %s", demoLog.Serial, log.Serial)
+	}
+	if log.Event != demoLog.Event {
+		t.Errorf("Expected event %s, got %s", demoLog.Event, log.Event)
+	}
+	if log.Timestamp == 0 {
+		t.Errorf("Expected timestamp to be set, got 0")
+	}
+}
+
 func TestGetAllLogs(t *testing.T) {
 	InitiateLogTest()
 

@@ -15,7 +15,7 @@ func NewLogService(db *gorm.DB) *LogService {
 	return &LogService{DB: db}
 }
 
-func (s *LogService) CreateLogHelper(event string, serial string) error {
+func (s *LogService) CreateLogHelper(serial string, event string) error {
 	logM := &models.Log{
 		Event:     event,
 		Serial:    serial,

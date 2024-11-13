@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"rami/models"
 	"rami/services"
 
 	"github.com/gorilla/mux"
@@ -16,32 +15,6 @@ type LogController struct {
 
 func NewLogController(logService *services.LogService) *LogController {
 	return &LogController{LogService: logService}
-}
-
-func (lc *LogController) CreateLogHandler(w http.ResponseWriter, r *http.Request) {
-	var logEntry models.Log
-
-	type LogRequest struct {
-		Serial string `json:"serial"`
-		Event  string `json:"event"`
-	}
-
-	var logReq LogRequest
-	if err := json.NewDecoder(r.Body).Decode(&logReq); err != nil {
-		http.Error(w, "Invalid request payload, "+err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	logEntry.Serial = logReq.Serial
-	logEntry.Event = logReq.Event
-	logEntry.Timestamp = models.GetCurrentTimestamp()
-	if err := lc.LogService.CreateLog(&logEntry); err != nil {
-		log.Printf("Failed to create log: %v", err)
-		http.Error(w, "Failed to create log", http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (lc *LogController) SearchLogsBySerialHandler(w http.ResponseWriter, r *http.Request) {

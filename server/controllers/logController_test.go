@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -24,29 +23,8 @@ func initLogControllerTest() {
 	logController = NewLogController(logService)
 
 	logRouter = mux.NewRouter()
-	logRouter.HandleFunc("/logs", logController.CreateLogHandler).Methods("POST")
 	logRouter.HandleFunc("/logs/{serial}", logController.SearchLogsBySerialHandler).Methods("GET")
 	logRouter.HandleFunc("/logs", logController.GetAllLogsHandler).Methods("GET")
-}
-
-func TestCreateLogHandler(t *testing.T) {
-	initLogControllerTest()
-
-	logReq := map[string]string{
-		"serial": gofakeit.UUID(),
-		"event":  gofakeit.Word(),
-	}
-	body, _ := json.Marshal(logReq)
-	req, err := http.NewRequest("POST", "/logs", bytes.NewBuffer(body))
-	if err != nil {
-		t.Fatal(err)
-	}
-	rr := httptest.NewRecorder()
-	logRouter.ServeHTTP(rr, req)
-
-	if status := rr.Code; status != http.StatusCreated {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusCreated)
-	}
 }
 
 func TestSearchLogsBySerialHandler(t *testing.T) {

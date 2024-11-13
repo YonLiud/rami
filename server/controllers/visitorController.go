@@ -12,10 +12,11 @@ import (
 
 type VisitorController struct {
 	VisitorService *services.VisitorService
+	LogService     *services.LogService
 }
 
 func NewVisitorController(visitorService *services.VisitorService) *VisitorController {
-	return &VisitorController{VisitorService: visitorService}
+	return &VisitorController{VisitorService: visitorService, LogService: services.NewLogService(visitorService.DB)}
 }
 
 func (vc *VisitorController) CreateVisitorHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,6 +43,7 @@ func (vc *VisitorController) CreateVisitorHandler(w http.ResponseWriter, r *http
 		return
 	}
 
+	vc.LogService.CreateLogHelper(visitor.CredentialsNumber, "Visitor created")
 	w.WriteHeader(http.StatusCreated)
 }
 
@@ -131,6 +133,7 @@ func (vc *VisitorController) UpdateVisitorHandler(w http.ResponseWriter, r *http
 		return
 	}
 
+	vc.LogService.CreateLogHelper(visitor.CredentialsNumber, "Visitor updated")
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -158,6 +161,12 @@ func (vc *VisitorController) MarkEntryExitHandler(w http.ResponseWriter, r *http
 		log.Printf("Failed to update visitor: %v", err)
 		http.Error(w, "Failed to update visitor", http.StatusInternalServerError)
 		return
+	}
+
+	if visitor.Inside {
+		vc.LogService.CreateLogHelper(visitor.CredentialsNumber, "Visitor entered")
+	} else {
+		vc.LogService.CreateLogHelper(visitor.CredentialsNumber, "Visitor exited")
 	}
 
 	w.WriteHeader(http.StatusOK)

@@ -22,6 +22,8 @@ func NewVisitorController(visitorService *services.VisitorService) *VisitorContr
 func (vc *VisitorController) CreateVisitorHandler(w http.ResponseWriter, r *http.Request) {
 	var visitor models.Visitor
 
+	log.Println(r.Body)
+
 	if err := json.NewDecoder(r.Body).Decode(&visitor); err != nil {
 		http.Error(w, "Invalid request payload, "+err.Error(), http.StatusBadRequest)
 		return

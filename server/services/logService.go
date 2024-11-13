@@ -1,6 +1,7 @@
 package services
 
 import (
+	"log"
 	"rami/models"
 
 	"gorm.io/gorm"
@@ -15,15 +16,17 @@ func NewLogService(db *gorm.DB) *LogService {
 }
 
 func (s *LogService) CreateLogHelper(event string, serial string) error {
-	log := &models.Log{
+	logM := &models.Log{
 		Event:     event,
 		Serial:    serial,
 		Timestamp: models.GetCurrentTimestamp(),
 	}
 
-	if err := s.DB.Create(log).Error; err != nil {
+	if err := s.DB.Create(logM).Error; err != nil {
 		return err
 	}
+
+	log.Println("Log created", logM)
 	return nil
 }
 

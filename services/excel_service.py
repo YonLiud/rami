@@ -53,3 +53,36 @@ def data_to_json():
         json_data[sheet_name] = rows
 
     return json_data
+
+def search_value_in_data(search_value):
+    """
+    Search for a value in the cached data, handling type mismatches.
+
+    Parameters:
+        search_value: The value to search for in the cached data.
+
+    Returns:
+        dict: A dictionary where keys are sheet names and values are lists of matching rows.
+    """
+    global cachced_data
+
+    results = {}
+
+    if not cachced_data:
+        print("No cached data available.")
+        return results
+
+    search_value = str(search_value)
+
+    try:
+        for sheet_name, df in cachced_data.items():
+            df = df.map(str)
+            search_result = df[df.eq(search_value).any(axis=1)]
+            if not search_result.empty:
+                results[sheet_name] = search_result.to_dict(orient="records")
+
+    except Exception as e:
+        print("Failed to search value in data.")
+        print(e)
+
+    return results

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+    <ul>
+        {% for sheet, rows in results.items() %}
+            <li><strong>{{ sheet }}</strong></li>
+            <ul>
+                {% for row in rows %}
+                    <li>{{ row['מספר תעודה'] }} - {{ row['בפנים'] }}
+                        <a href="/mark_entry/{{ row['מספר תעודה'] }}">Mark Entry</a>
+                        <a href="/mark_exit/{{ row['מספר תעודה'] }}">Mark Exit</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+    <a href="/">Back to Home</a>
+</body>
+</html>

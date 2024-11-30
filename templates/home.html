@@ -5,18 +5,19 @@
     <title>Visitors Inside</title>
 </head>
 <body>
-    <h1>Visitors Inside</h1>
+    <h1>RAMI</h1>
     <form action="/search" method="post">
         <input type="text" name="search_id" placeholder="Search by ID">
         <button type="submit">Search</button>
     </form>
+    <h2>אורחים בפנים</h2>
     <ul>
         {% for sheet, visitors in visitors.items() %}
             <li><strong>{{ sheet }}</strong></li>
             <ul>
                 {% for visitor in visitors %}
-                    <li>{{ visitor['מספר תעודה'] }} - {{ visitor['בפנים'] }}
-                        <a href="/mark_exit/{{ visitor['מספר תעודה'] }}">Mark Exit</a>
+                    <li>
+                        {{ visitor['מספר תעודה'] }} - {{ visitor['שם מלא'] }}
                     </li>
                 {% endfor %}
             </ul>

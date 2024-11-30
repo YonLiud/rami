@@ -115,6 +115,37 @@ def search_value_in_data(search_value):
 
     return results
 
+def get_all_visitors_inside():
+    """
+    Get all visitors inside
+
+    Returns:
+        dict: A dictionary where keys are sheet names and values are lists of rows where 'בפנים' = 'YES'.
+    """
+    global cachced_data
+
+    results = {}
+
+    if not cachced_data:
+        print("No cached data available.")
+        return results
+
+    try:
+        for sheet_name, df in cachced_data.items():
+            if "בפנים" not in df.columns:
+                print(f"Column 'בפנים' not found in sheet '{sheet_name}'.")
+                results[sheet_name] = []
+                continue
+
+            inside = df[df["בפנים"] == "YES"]
+            results[sheet_name] = inside.to_dict(orient="records")
+
+    except Exception as e:
+        print("Failed to get visitors inside.")
+        print(e)
+
+    return results
+
 def mark_row_in_all_sheets(search_value, mark_value):
     """
     Mark a specific row in the 'בפנים' column across all sheets based on a unique value 

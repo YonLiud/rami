@@ -1,3 +1,6 @@
 *.xlsx
 .venv*
 *.pyc
+
+*.json
+.vscode/

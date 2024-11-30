@@ -27,6 +27,11 @@ def route_mark_exit(visitor_id):
     save_cached_data()
     return redirect(url_for('home'))
 
+@app.route('/refresh/')
+def route_refresh():
+    load_and_cache_excel("database.xlsx")
+    return redirect(url_for('home'))
+
 if __name__ == '__main__':
     load_and_cache_excel("database.xlsx")
     app.run(debug=True)

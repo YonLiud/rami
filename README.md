@@ -20,5 +20,9 @@ Rami is a web-based application designed to log the entry and exit of visitors. 
 3. Run `pyinstaller ramiexe.spec` to build the executable
    The executable will be in the `dist` folder
 
-[!INFO]
+>[!INFO]
 > This will generate the executable based on the configuration specified in the ``ramiexe.spec`` file. The output will be placed in the ``dist`` directory.
+
+## TODO
+
+- Add logging functionality to log the entry and exit of visitors and ability to export the logs

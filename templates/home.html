@@ -7,7 +7,9 @@
 </head>
 <body>
     <h1>RAMI</h1>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="top-right-image">
     <a href="/refresh" class="button">Refresh</a>
+    <p>Last Refresh: {{ last_updated }}</p>
     {% if error_message %}
         <div class="error-header">
             {{ error_message }}

@@ -1,15 +1,21 @@
 from time import sleep
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 from services.excel_service import load_and_cache_excel, save_cached_data
 from services.excel_service_wrapper import *
 
 app = Flask(__name__)
 
+
+
 @app.route('/')
 def home():
     visitors_inside = get_visitors_inside()
     error_message = request.args.get('error_message')
-    return render_template('home.html', visitors=visitors_inside, error_message=error_message)
+    last_updated = request.args.get('last_updated')
+    if not last_updated:
+        last_updated = datetime.now()
+    return render_template('home.html', visitors=visitors_inside, error_message=error_message, last_updated=last_updated)
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -42,7 +48,7 @@ def route_mark_exit(visitor_id):
 @app.route('/refresh/')
 def route_refresh():
     load_and_cache_excel("database.xlsx")
-    return redirect(url_for('home'))
+    return redirect(url_for('home', last_updated=datetime.now()))
 
 if __name__ == '__main__':
     if not load_and_cache_excel("database.xlsx"):

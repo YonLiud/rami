@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>RAMI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>RAMI</h1>
-    <a href="/refresh">Refresh</a>
+    <a href="/refresh" class="button">Refresh</a>
     {% if error_message %}
-        <div class="error-header" style="color: red; font-weight: bold;">
+        <div class="error-header">
             {{ error_message }}
         </div>
     {% endif %}
     <form action="/search" method="post">
-        <input type="text" name="search_id" placeholder="Search by ID">
-        <button type="submit">Search</button>
+        <input type="text" name="search_id" placeholder="Search All Fields">
+        <button type="submit" class="button">Search</button>
     </form>
     <h2>אורחים בפנים</h2>
     <ul>

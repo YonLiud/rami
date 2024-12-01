@@ -1,0 +1,170 @@
+/* IF ANYONE READS THIS
+    * I'm sorry for all of the CSS being in one file, I know it's bad practice but I'm too lazy to create a new CSS file for this small project.
+
+*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #171b1a;
+    color: #ccc;
+}
+
+.error-header {
+    color: #fff;
+    background-color: #ff4c4c;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+a {
+    color: #37a660;
+    text-decoration: none;
+}
+
+a.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #37a660;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+a.button:hover {
+    background-color: #2e8b57;
+}
+
+h2 {
+    text-align: center;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px auto;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    min-width: 400px;
+    max-width: 800px;
+}
+
+.card-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-body {
+    margin-bottom: 10px;
+}
+
+.card-footer {
+    text-align: right;
+}
+
+.card-footer a {
+    margin-left: 10px;
+}
+
+.card table {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.card table, .card th, .card td {
+    border: 1px solid #ccc;
+}
+
+.card th, .card td {
+    padding: 8px;
+}
+
+.card th {
+    background-color: #2e8b57;
+    color: white;
+}
+
+.toright {
+    text-align: right;
+}
+
+.toleft {
+    text-align: left;
+}
+
+ul {
+    margin: 0 auto;
+    width: 50%;
+    min-width: 400px;
+    max-width: 800px;
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #2e2e2e;
+    border-radius: 5px;
+}
+
+ul li strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+ul ul {
+    margin-left: 20px;
+}
+
+ul ul li {
+    background-color: #3e3e3e;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+form input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 300px;
+    max-width: 100%;
+}
+
+form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #37a660;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #2e8b57;
+}

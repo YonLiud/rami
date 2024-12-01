@@ -23,8 +23,6 @@ def route_mark_entry(visitor_id):
         save_cached_data()
     except Exception as e:
         error_message = str(e)
-        if Exception == PermissionError:
-            error_message = "Please close the Excel file and try again."
         return redirect(url_for('home', error_message=error_message))
     return redirect(url_for('home'))
 

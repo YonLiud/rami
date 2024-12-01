@@ -2,51 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Search Results</title>
-    <style>
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .card-header {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .card-body {
-            margin-bottom: 10px;
-        }
-        .card-footer {
-            text-align: right;
-        }
-        .card-footer a {
-            margin-left: 10px;
-        }
-    </style>
+    <title>RAMI - Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Search Results</h1>
+    <a href="/" class="button">Back to Home</a>
     <div>
         {% for sheet, rows in results.items() %}
             <h2>{{ sheet }}</h2>
             {% for row in rows %}
                 <div class="card">
-                    <div class="card-header">ID: {{ row['מספר תעודה'] }}</div>
+                    <div class="card-header">{{ row['מספר תעודה'] }}</div>
                     <div class="card-body">
-                        {% for key, value in row.items() %}
-                            <p><strong>{{ key }}:</strong> {{ value }}</p>
-                        {% endfor %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="toright">Field</th>
+                                    <th class="toleft">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, value in row.items() %}
+                                    <tr>
+                                        <td class="toright"><strong>{{ key }}</strong></td>
+                                        <td class="toleft">{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                     <div class="card-footer">
-                        <a href="/mark_entry/{{ row['מספר תעודה'] }}">Mark Entry</a>
-                        <a href="/mark_exit/{{ row['מספר תעודה'] }}">Mark Exit</a>
+                        <a href="/mark_entry/{{ row['מספר תעודה'] }}" class="button">Mark Entry</a>
+                        <a href="/mark_exit/{{ row['מספר תעודה'] }}" class="button">Mark Exit</a>
                     </div>
                 </div>
             {% endfor %}
         {% endfor %}
     </div>
-    <a href="/">Back to Home</a>
 </body>
 </html>

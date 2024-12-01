@@ -17,7 +17,6 @@ def mark_entry(visitor_id: str):
         mark_row_in_all_sheets(visitor_id, "YES")
     except Exception as e:
         print(e)
-        return False
     
 def mark_exit(visitor_id: str):
     """
@@ -27,9 +26,6 @@ def mark_exit(visitor_id: str):
         mark_row_in_all_sheets(visitor_id, "NO")
     except Exception as e:
         print(e)
-        return False
-    
-    return True
 
 def get_by_flag(flag: str):
     """

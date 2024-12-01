@@ -1,3 +1,4 @@
+from time import sleep
 from flask import Flask, render_template, request, redirect, url_for
 from services.excel_service import load_and_cache_excel, save_cached_data
 from services.excel_service_wrapper import *
@@ -45,5 +46,7 @@ def route_refresh():
 
 if __name__ == '__main__':
     if not load_and_cache_excel("database.xlsx"):
-        print("Failed to load excel file")
+        print("Failed to load excel file, Exiting...")
+        sleep(5)
+        exit()
     app.run(debug=True)

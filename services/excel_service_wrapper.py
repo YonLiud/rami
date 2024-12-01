@@ -15,7 +15,6 @@ def mark_entry(visitor_id: str):
     """
     try:
         mark_row_in_all_sheets(visitor_id, "YES")
-        save_cached_data()
     except Exception as e:
         print(e)
         return False
@@ -26,7 +25,6 @@ def mark_exit(visitor_id: str):
     """
     try:
         mark_row_in_all_sheets(visitor_id, "NO")
-        save_cached_data()
     except Exception as e:
         print(e)
         return False

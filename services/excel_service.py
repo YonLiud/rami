@@ -3,31 +3,27 @@ import os
 import json
 
 cachced_data = {}
-file_last_modified = None
 file_path = None
 
 def load_and_cache_excel(file_path_i: str):
     """
     Load an excel file and cache it in memory
     """
-    global cachced_data, file_last_modified, file_path
+    global cachced_data, file_path
 
     if not os.path.exists(file_path_i):
         print(f"File not found: {file_path_i}")
-        return
+        return False
     
     file_path = file_path_i
 
-    try:
-        current_modified = os.path.getmtime(file_path)
+    cachced_data = {}
 
-        if current_modified == file_last_modified:
-            return cachced_data
-        
+    try:
+
         excel_data = pd.read_excel(file_path, sheet_name=None)
 
         cachced_data = {sheet_name: df for sheet_name, df in excel_data.items()}
-        file_last_modified = current_modified
 
         print(f"Loaded excel file: {file_path}")
         return cachced_data
@@ -35,7 +31,9 @@ def load_and_cache_excel(file_path_i: str):
     except Exception as e:
         print(f"Failed to load excel file: {file_path}")
         print(e)
-        return None
+        return False
+    
+    return True
     
 def get_cached_data():
     """
@@ -47,22 +45,16 @@ def save_cached_data():
     global cachced_data, file_path
 
     if not cachced_data:
-        print("No cached data found")
-        return
-    
+        raise ValueError("No cached data found")
+
     if not file_path:
-        print("No file path found")
-        return
-    
-    try:
-        with pd.ExcelWriter(file_path) as writer:
-            for sheet_name, df in cachced_data.items():
-                df.to_excel(writer, sheet_name=sheet_name, index=False)
-        
-        print("Saved cached data to excel file")
-    except Exception as e:
-        print("Failed to save cached data to excel file")
-        print(e)
+        raise ValueError("No file path found")
+
+    with pd.ExcelWriter(file_path) as writer:
+        for sheet_name, df in cachced_data.items():
+            df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+    print("Saved cached data to excel file")
 
 def data_to_json():
     """

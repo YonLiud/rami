@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Visitors Inside</title>
+    <title>RAMI</title>
 </head>
 <body>
     <h1>RAMI</h1>
     <a href="/refresh">Refresh</a>
+    {% if error_message %}
+        <div class="error-header" style="color: red; font-weight: bold;">
+            {{ error_message }}
+        </div>
+    {% endif %}
     <form action="/search" method="post">
         <input type="text" name="search_id" placeholder="Search by ID">
         <button type="submit">Search</button>

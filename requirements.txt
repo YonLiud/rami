@@ -4,3 +4,4 @@ openpyxl
 flask-cors
 Werkzeug
 APScheduler
+pyinstaller

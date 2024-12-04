@@ -1,0 +1,11 @@
+*.xlsx
+.venv*
+*.pyc
+
+*.json
+.vscode/
+
+*pycache*
+
+dist
+build

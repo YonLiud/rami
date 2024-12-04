@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RAMI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>RAMI</h1>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="top-right-image">
+    <a href="/refresh" class="button">Refresh</a>
+    <p>Last Refresh: {{ last_updated }}</p>
+    {% if error_message %}
+        <div class="error-header">
+            {{ error_message }}
+        </div>
+    {% endif %}
+    <form action="/search" method="post">
+        <input type="text" name="search_id" placeholder="Search All Fields">
+        <button type="submit" class="button">Search</button>
+    </form>
+    <h2>אורחים בפנים</h2>
+    <ul>
+        {% for sheet, visitors in visitors.items() %}
+            <li><strong>{{ sheet }}</strong></li>
+            <ul>
+                {% for visitor in visitors %}
+                    <li>
+                        {{ visitor['מספר תעודה'] }} - {{ visitor['שם מלא'] }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+</body>
+</html>

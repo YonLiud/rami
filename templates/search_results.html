@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RAMI - Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Search Results</h1>
+    <a href="/" class="button">Back to Home</a>
+    <div>
+        {% for sheet, rows in results.items() %}
+            <h2>{{ sheet }}</h2>
+            {% for row in rows %}
+                <div class="card">
+                    <div class="card-header">{{ row['מספר תעודה'] }}</div>
+                    <div class="card-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="toright">Field</th>
+                                    <th class="toleft">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, value in row.items() %}
+                                    <tr>
+                                        <td class="toright"><strong>{{ key }}</strong></td>
+                                        <td class="toleft">{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/mark_entry/{{ row['מספר תעודה'] }}" class="button">Mark Entry</a>
+                        <a href="/mark_exit/{{ row['מספר תעודה'] }}" class="button">Mark Exit</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</body>
+</html>

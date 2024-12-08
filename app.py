@@ -1,12 +1,11 @@
 from time import sleep
+import sys
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 from services.excel_service import load_and_cache_excel, save_cached_data
 from services.excel_service_wrapper import *
 
 app = Flask(__name__)
-
-
 
 @app.route('/')
 def home():
@@ -51,8 +50,21 @@ def route_refresh():
     return redirect(url_for('home', last_updated=datetime.now()))
 
 if __name__ == '__main__':
-    if not load_and_cache_excel("database.xlsx"):
-        print("Failed to load excel file, Exiting...")
-        sleep(5)
-        exit()
+    database_file = "database.xlsx"
+
+    if len(sys.argv) > 1:
+        database_file = sys.argv[1]
+    
+    if not database_file:
+        print("Please provide the path to the database file as an argument.")
+        exit(1)
+
+    if not database_file.endswith(".xlsx"):
+        print("Please provide a valid Excel file.")
+        exit(1)
+
+    if not load_and_cache_excel(database_file):
+        print("Failed to load and cache the Excel file.")
+        exit(1)
+
     app.run(debug=True)

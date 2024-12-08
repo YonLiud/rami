@@ -7,6 +7,7 @@ from services.excel_service import load_and_cache_excel, save_cached_data
 from services.excel_service_wrapper import *
 
 app = Flask(__name__)
+database_file = ""
 
 @app.route('/')
 def home():
@@ -47,29 +48,25 @@ def route_mark_exit(visitor_id):
 
 @app.route('/refresh/')
 def route_refresh():
+    global database_file
     load_and_cache_excel(database_file)
     return redirect(url_for('home', last_updated=datetime.now()))
 
 if __name__ == '__main__':
-    if not sys.argv[1:]:
-        database_file = input("Please drag and drop the Excel file to the terminal and press enter: ").strip()
-    else:
-        database_file = sys.argv[1]
-
     if not database_file:
-        print("No file path provided. Exiting...")
-        sleep(5)
-        sys.exit(1)
+        if not sys.argv[1:]:
+            database_file = input("Please drag and drop the Excel file to the terminal and press enter: ").strip()
+        else:
+            database_file = sys.argv[1]
+        if not database_file.endswith(".xlsx"):
+            print("Please provide a valid Excel file.")
+            sleep(5)
+            sys.exit(1)
 
-    if not database_file.endswith(".xlsx"):
-        print("Please provide a valid Excel file.")
-        sleep(5)
-        sys.exit(1)
-
-    if not os.path.isfile(database_file):
-        print(f"File not found: {database_file}")
-        sleep(5)
-        sys.exit(1)
+        if not os.path.isfile(database_file):
+            print(f"File not found: {database_file}")
+            sleep(5)
+            sys.exit(1)
 
     if not load_and_cache_excel(database_file):
         print("Failed to load and cache the Excel file.")

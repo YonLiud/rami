@@ -1,5 +1,6 @@
-from time import sleep
 import sys
+import os
+from time import sleep
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 from services.excel_service import load_and_cache_excel, save_cached_data
@@ -39,32 +40,40 @@ def route_mark_exit(visitor_id):
         save_cached_data()
     except Exception as e:
         error_message = str(e)
-        if Exception == PermissionError:
+        if isinstance(e, PermissionError):
             error_message = "Please close the Excel file and try again."
         return redirect(url_for('home', error_message=error_message))
     return redirect(url_for('home'))
 
 @app.route('/refresh/')
 def route_refresh():
-    load_and_cache_excel("database.xlsx")
+    load_and_cache_excel(database_file)
     return redirect(url_for('home', last_updated=datetime.now()))
 
 if __name__ == '__main__':
-    database_file = "database.xlsx"
-
-    if len(sys.argv) > 1:
+    if not sys.argv[1:]:
+        database_file = input("Please drag and drop the Excel file to the terminal and press enter: ").strip()
+    else:
         database_file = sys.argv[1]
-    
+
     if not database_file:
-        print("Please provide the path to the database file as an argument.")
-        exit(1)
+        print("No file path provided. Exiting...")
+        sleep(5)
+        sys.exit(1)
 
     if not database_file.endswith(".xlsx"):
         print("Please provide a valid Excel file.")
-        exit(1)
+        sleep(5)
+        sys.exit(1)
+
+    if not os.path.isfile(database_file):
+        print(f"File not found: {database_file}")
+        sleep(5)
+        sys.exit(1)
 
     if not load_and_cache_excel(database_file):
         print("Failed to load and cache the Excel file.")
-        exit(1)
+        sleep(5)
+        sys.exit(1)
 
-    app.run(debug=True)
+    app.run(debug=False)

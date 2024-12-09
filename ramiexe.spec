@@ -35,6 +35,7 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=True,
+    icon='icon.ico',
 )
 coll = COLLECT(
     exe,

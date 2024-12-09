@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}RAMI{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='refreshbox.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='card.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='images.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='list.css') }}">
+    
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <h1 class="title">RAMI</h1>
+    <img src="{{ url_for('static', filename='yaba.png') }}" alt="yaba" class="top-right-image">
+    <img src="{{ url_for('static', filename='palga.png') }}" alt="palga" class="lower-right-image">
+    {% if error_message %}
+        <div class="error-header">
+            {{ error_message }}
+        </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+</body>
+</html>

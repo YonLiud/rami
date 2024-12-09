@@ -6,9 +6,7 @@ cachced_data = {}
 file_path = None
 
 def load_and_cache_excel(file_path_i: str):
-    """
-    Load an excel file and cache it in memory
-    """
+
     global cachced_data, file_path
 
     if not os.path.exists(file_path_i):
@@ -36,9 +34,6 @@ def load_and_cache_excel(file_path_i: str):
     return True
     
 def get_cached_data():
-    """
-    Get the cached data
-    """
     return cachced_data
 
 def save_cached_data():
@@ -57,9 +52,6 @@ def save_cached_data():
     print("Saved cached data to excel file")
 
 def data_to_json():
-    """
-    Convert the cached data to json
-    """
     global cachced_data
 
     json_data = {}
@@ -75,15 +67,6 @@ def data_to_json():
     return json_data
 
 def search_value_in_data(search_value):
-    """
-    Search for a value in the cached data, handling type mismatches.
-
-    Parameters:
-        search_value: The value to search for in the cached data.
-
-    Returns:
-        dict: A dictionary where keys are sheet names and values are lists of matching rows.
-    """
     global cachced_data
 
     results = {}
@@ -108,12 +91,6 @@ def search_value_in_data(search_value):
     return results
 
 def get_all_visitors_inside():
-    """
-    Get all visitors inside
-
-    Returns:
-        dict: A dictionary where keys are sheet names and values are lists of rows where 'בפנים' = 'YES'.
-    """
     global cachced_data
 
     results = {}
@@ -139,17 +116,6 @@ def get_all_visitors_inside():
     return results
 
 def mark_row_in_all_sheets(search_value, mark_value):
-    """
-    Mark a specific row in the 'בפנים' column across all sheets based on a unique value 
-    in the 'מספר תעודה' column.
-
-    Parameters:
-        search_value: The unique value to search for in the 'מספר תעודה' column.
-        mark_value: The value to set in the 'בפנים' column.
-
-    Returns:
-        dict: A dictionary with sheet names as keys and success status as values.
-    """
     global cachced_data
 
     if not cachced_data:

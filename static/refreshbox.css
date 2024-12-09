@@ -1,0 +1,25 @@
+/* Refresh Box */
+.refresh-box {
+    position: fixed;
+    top: 15vh;
+    left: 5vw;
+    width: 20vw;
+    z-index: 10;
+    border: 2px solid #4caf50;
+    background: #1e1e1e; /* Slightly lighter contrast */
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.refresh-box .button {
+    display: block;
+    margin: 15px auto;
+    width: 70%;
+}
+
+.refresh-box p {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #bdbdbd;
+}

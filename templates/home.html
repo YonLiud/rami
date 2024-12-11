@@ -20,7 +20,7 @@
             <ul class="child-list">
                 {% for visitor in visitors %}
                     <li class="child-item">
-                        <a href="/mark_exit/{{ row['מספר תעודה'] }}" class="button">Mark Exit</a>
+                        <a href="/mark_exit/{{ visitor['מספר תעודה'] }}" class="button">Mark Exit</a>
                         {{ visitor['מספר תעודה'] }} - {{ visitor['שם מלא'] }}
                     </li>
                 {% endfor %}

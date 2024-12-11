@@ -4,37 +4,22 @@
 
 {% block content %}
 <h2>Search Results</h2>
-<a href="/" class="button">Back to Home</a>
 <div>
     {% for sheet, rows in results.items() %}
         <h2>{{ sheet }}</h2>
-        {% for row in rows %}
-            <div class="card">
-                <div class="card-header">ID: {{ row['מספר תעודה'] }}</div>
-                <div class="card-body">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for key, value in row.items() %}
-                                <tr>
-                                    <td><strong>{{ key }}</strong></td>
-                                    <td>{{ value }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer">
-                    <a href="/mark_entry/{{ row['מספר תעודה'] }}" class="button">Mark Entry</a>
-                    <a href="/mark_exit/{{ row['מספר תעודה'] }}" class="button">Mark Exit</a>
-                </div>
-            </div>
-        {% endfor %}
+        <ul class="main-list">
+            {% for row in rows %}
+            <a href="/visitor/{{ row['מספר תעודה'] }}">
+                <li class="parent-item">
+                    <ul class="child-list">
+                        <li class="child-item">
+                            <strong>{{ row['מספר תעודה'] }} - {{ row['שם מלא'] }}</strong>
+                        </li>
+                    </ul>
+                </li>
+            </a>
+            {% endfor %}
+        </ul>
     {% endfor %}
 </div>
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Visitor Details - RAMI{% endblock %}
+
+{% block content %}
+<h2>Visitor Details</h2>
+<div class="card">
+    <div class="card-header">
+        <h3>ID: {{ visitor_id }}</h3>
+    <div class="card-body">
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value_list in visitor.items() %}
+                    {% for value in value_list %}
+                        {% for field, field_value in value.items() %}
+                            <tr>
+                                <td><strong>{{ field }}</strong></td>
+                                <td>{{ field_value }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <a href="/mark_entry/{{ visitor_id }}" class="button">Mark Entry</a>
+        <a href="/mark_exit/{{ visitor_id }}" class="button">Mark Exit</a>
+    </div>
+</div>
+{% endblock %}

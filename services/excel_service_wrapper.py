@@ -23,3 +23,10 @@ def get_by_flag(flag: str):
     visitors = search_value_in_data(flag)
 
     return visitors
+
+def get_by_id(visitor_id: str):
+    visitor = None
+
+    visitor = search_by_id(visitor_id)
+
+    return visitor

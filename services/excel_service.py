@@ -90,6 +90,34 @@ def search_value_in_data(search_value):
 
     return results
 
+def search_by_id(search_value):
+    global cachced_data
+
+    results = {}
+
+    if not cachced_data:
+        print("No cached data available.")
+        return results
+
+    search_value = str(search_value)
+
+    try:
+        for sheet_name, df in cachced_data.items():
+            if "מספר תעודה" not in df.columns:
+                print(f"Column 'מספר תעודה' not found in sheet '{sheet_name}'.")
+                results[sheet_name] = []
+                continue
+
+            match = df[df["מספר תעודה"].astype(str) == search_value]
+            if not match.empty:
+                results[sheet_name] = match.to_dict(orient="records")
+
+    except Exception as e:
+        print("Failed to search by id.")
+        print(e)
+
+    return results
+
 def get_all_visitors_inside():
     global cachced_data
 

@@ -21,6 +21,9 @@
             {{ error_message }}
         </div>
     {% endif %}
+    {% if not request.path == '/' %}
+        <a href="/" class="button home-button">Back to Home</a>
+    {% endif %}
     {% block content %}{% endblock %}
 </body>
 </html>

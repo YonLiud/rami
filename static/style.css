@@ -44,11 +44,17 @@ a.button {
     border-radius: 8px;
     text-align: center;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth color change */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 
 a.button:hover {
     background-color: #2e7d32;
-    color: #c8e6c9; /* Change text color on hover */
+    color: #c8e6c9;
+}
+
+.home-button {
+    position: fixed;
+    top: 40vh;
+    right: 5vw;
 }

@@ -7,7 +7,7 @@ from services.excel_service import load_and_cache_excel, save_cached_data
 from services.excel_service_wrapper import *
 
 app = Flask(__name__)
-database_file = ""
+database_file = None
 
 @app.route('/')
 def home():
@@ -23,6 +23,13 @@ def search():
     search_id = request.form['search_id']
     search_results = search_value_in_data(search_id)
     return render_template('search_results.html', results=search_results)
+
+@app.route('/visitor/<visitor_id>')
+def visitor_details(visitor_id):
+    visitor = get_by_id(visitor_id)
+    if not visitor:
+        return redirect(url_for('home', error_message="Visitor not found"))
+    return render_template('visitor_details.html', visitor=visitor, visitor_id=visitor_id)
 
 @app.route('/mark_entry/<visitor_id>')
 def route_mark_entry(visitor_id):
@@ -48,7 +55,6 @@ def route_mark_exit(visitor_id):
 
 @app.route('/refresh/')
 def route_refresh():
-    global database_file
     load_and_cache_excel(database_file)
     return redirect(url_for('home', last_updated=datetime.now()))
 

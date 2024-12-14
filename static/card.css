@@ -1,24 +1,24 @@
 .card {
-    border: 1px solid #424242;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px auto;
-    background-color: #1e1e1e;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    padding: var(--spacing-large);
+    margin: var(--spacing-large) auto;
+    background-color: var(--color-bg-tertiary);
+    box-shadow: var(--box-shadow-strong);
     width: 50%;
     min-width: 400px;
     max-width: 800px;
-    color: #e0e0e0;
+    color: var(--color-text-secondary);
 }
 
 .card-header {
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
     font-size: 18px;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-small);
 }
 
 .card-body {
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-small);
 }
 
 .card-footer {
@@ -26,25 +26,25 @@
 }
 
 .card-footer a {
-    margin-left: 10px;
+    margin-left: var(--spacing-small);
 }
 
 .card table {
     width: 100%;
     margin: 0 auto;
     border-collapse: collapse;
-    background-color: #252525;
+    background-color: var(--color-bg-secondary);
 }
 
 .card table, .card th, .card td {
-    border: 1px solid #424242;
+    border: 1px solid var(--color-border);
 }
 
 .card th, .card td {
-    padding: 12px;
+    padding: var(--spacing-medium);
 }
 
 .card th {
-    background-color: #388e3c;
-    color: #ffffff;
+    background-color: var(--color-button-bg);
+    color: var(--color-text-primary);
 }

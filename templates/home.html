@@ -18,7 +18,9 @@
 <ul class="main-list">
     {% for sheet, visitors in visitors.items() %}
         <li class="parent-item">
-            <strong>{{ sheet }}</strong>
+            <div class="parent-header">
+                <strong>{{ sheet }}</strong>
+            </div>
             <ul class="child-list">
                 {% for visitor in visitors %}
                 <a href="/visitor/{{ visitor['מספר תעודה'] }}">

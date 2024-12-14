@@ -20,7 +20,6 @@ body {
     flex: 1;
 }
 
-/* Title */
 h1, h2 {
     text-align: center;
     font-weight: 700;
@@ -28,7 +27,13 @@ h1, h2 {
     color: #ffffff;
 }
 
-/* Error Header */
+h3 {
+    text-align: center;
+    font-weight: 900;
+    user-select: none;
+    text-transform: uppercase;
+}
+
 .error-header {
     color: #ffffff;
     background-color: #d32f2f;

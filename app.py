@@ -2,7 +2,7 @@ import sys
 import os
 from time import sleep
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 from services.excel_service import load_and_cache_excel, save_cached_data
 from services.excel_service_wrapper import *
 
@@ -14,9 +14,19 @@ def home():
     visitors_inside = get_visitors_inside()
     error_message = request.args.get('error_message')
     last_updated = request.args.get('last_updated')
+    logs = get_5_last_logs()
     if not last_updated:
         last_updated = datetime.now()
-    return render_template('home.html', visitors=visitors_inside, error_message=error_message, last_updated=last_updated)
+    return render_template('home.html', visitors=visitors_inside, error_message=error_message, last_updated=last_updated, logs=logs)
+
+@app.route('/download_logs')
+def download_logs():
+    try:
+        return send_file("time_log.csv", as_attachment=True)
+    except Exception as e:
+        error_message = str(e)
+        return redirect(url_for('home', error_message=error_message))
+
 
 @app.route('/search', methods=['POST'])
 def search():

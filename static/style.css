@@ -44,8 +44,8 @@ a {
 
 a.button {
     display: inline-block;
-    padding: var(--spacing-medium) var(--spacing-large);
     font-size: var(--font-size-normal);
+    padding: var(--spacing-small) 0;
     font-weight: 600;
     color: var(--color-text-primary);
     background-color: var(--color-button-bg);
@@ -58,6 +58,23 @@ a.button {
 a.button:hover {
     background-color: var(--color-button-hover);
     color: var(--color-bg-tertiary);
+}
+
+a.home-button {
+    position: fixed;
+
+    top: 5vh;
+    left: 5vw;
+
+    padding: var(--spacing-small) var(--spacing-medium);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    background-color: var(--color-button-bg);
+    border-radius: var(--radius-medium);
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::-webkit-scrollbar {

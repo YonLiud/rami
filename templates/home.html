@@ -17,6 +17,23 @@
 </div>
 <div class="log-box">
     <h2>Logs</h2>
+    <ul>
+        <table>
+            <tr>
+                <th>מספר זהות</th>
+                <th>אירוע</th>
+                <th>זמן</th>
+            </tr>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log[0] }}</td>
+                <td>{{ log[1] }}</td>
+                <td>{{ log[2] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </ul>
+    <a href="/download_logs" class="button">Download File</a>
 </div>
 
 <h2>אורחים בפנים</h2>

@@ -1,0 +1,18 @@
+.log-box {
+
+    position: fixed;
+    top: 40vh;
+    right: 5vw;
+    height: 40vh;
+
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--box-shadow-light);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-normal);
+    margin: var(--spacing-medium) 0;
+    padding: var(--spacing-medium);
+    width: 20vw;
+}

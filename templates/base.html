@@ -8,11 +8,11 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='variables.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='utilitybox.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='card.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='images.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='list.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+        {% block head %}{% endblock %}
         
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     </head>

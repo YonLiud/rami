@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block title %}Home - RAMI{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='utilitybox.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='logbox.css') }}">
+{% endblock %}
 
 {% block content %}
 <form action="/search" method="post">
@@ -10,8 +14,9 @@
 <div class="utility-box">
     <a href="/refresh" class="button">Refresh</a>
     <p>Last Refresh: {{ last_updated }}</p>
-    <br/>
-    <a href="/logs" class="button">Logs</a>
+</div>
+<div class="log-box">
+    <h2>Logs</h2>
 </div>
 
 <h2>אורחים בפנים</h2>

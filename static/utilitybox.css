@@ -1,0 +1,37 @@
+.utility-box {
+    position: fixed;
+    top: 15vh;
+    left: 5vw;
+    width: 20vw;
+    z-index: 10;
+    border: 2px solid #4caf50;
+    background: #1e1e1e; /* Slightly lighter contrast */
+    padding: 10px;
+    border-radius: 8px;
+
+    /* if screen is less than 1920 widht */
+    @media (max-width: 1920px) {
+        position: fixed;
+        top: 10vh;
+        left: 5vw;
+        width: 10vw;
+        padding: 0;
+    }
+}
+
+.utility-box .button {
+    display: block;
+    margin: 15px auto;
+    width: 70%;
+    @media (max-width: 1500px) {
+        margin: 0;
+        width: 7vw; 
+    }
+}
+
+.utility-box p {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #bdbdbd;
+}

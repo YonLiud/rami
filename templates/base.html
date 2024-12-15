@@ -1,0 +1,47 @@
+<!-- BUILT BY YON LIUD - VEHICLE PLATOON -->
+<!-- HTTP://GITHUB.COM/YONLIUD -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}RAMI{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='variables.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='card.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='images.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='list.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+        {% block head %}{% endblock %}
+        
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    </head>
+    <body>
+        <div class="content">
+            <h1 class="title">RAMI</h1>
+            <h3 class="subtitle">503 Site Entry Monitor</h3>
+            <img src="{{ url_for('static', filename='yaba.png') }}" alt="yaba" class="top-right-image">
+            <img src="{{ url_for('static', filename='palga.png') }}" alt="palga" class="lower-right-image">
+            {% if error_message %}
+            <div class="error-header">
+                {{ error_message }}
+            </div>
+            {% endif %}
+            {% if not request.path == '/' %}
+            <a href="/" class="button home-button">Back to Home</a>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+        <footer>
+            <p>
+                RADAR & COM 503 SITE<br />Information Security Department
+            </p>
+        </footer>
+</body>
+<!--
+To the next maintainer of this project:
+
+this should have probably been built as an API with a frontend that consumes it. but it's too late for that now. 🤷‍♂️
+ 
+-->
+</html>

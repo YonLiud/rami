@@ -1,36 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>RAMI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>RAMI</h1>
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="top-right-image">
+{% extends "base.html" %}
+
+{% block title %}Home - RAMI{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='utilitybox.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='logbox.css') }}">
+{% endblock %}
+
+{% block content %}
+<form action="/search" method="post">
+    <input type="text" name="search_id" placeholder="Search by ID">
+    <button type="submit" class="button">Search</button>
+</form>
+<div class="utility-box">
     <a href="/refresh" class="button">Refresh</a>
     <p>Last Refresh: {{ last_updated }}</p>
-    {% if error_message %}
-        <div class="error-header">
-            {{ error_message }}
-        </div>
-    {% endif %}
-    <form action="/search" method="post">
-        <input type="text" name="search_id" placeholder="Search All Fields">
-        <button type="submit" class="button">Search</button>
-    </form>
-    <h2>אורחים בפנים</h2>
+</div>
+<div class="log-box">
+    <h2>Logs</h2>
     <ul>
-        {% for sheet, visitors in visitors.items() %}
-            <li><strong>{{ sheet }}</strong></li>
-            <ul>
+        <table>
+            <tr>
+                <th>מספר זהות</th>
+                <th>אירוע</th>
+                <th>זמן</th>
+            </tr>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log[0] }}</td>
+                <td>{{ log[1] }}</td>
+                <td>{{ log[2] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </ul>
+    <a href="/download_logs" class="button">Download File</a>
+</div>
+
+<h2>אורחים בפנים</h2>
+<ul class="main-list">
+    {% for sheet, visitors in visitors.items() %}
+        <li class="parent-item">
+            <div class="parent-header">
+                <strong>{{ sheet }}</strong>
+            </div>
+            <ul class="child-list">
                 {% for visitor in visitors %}
-                    <li>
+                <a href="/visitor/{{ visitor['מספר תעודה'] }}">
+                    <li class="child-item">
                         {{ visitor['מספר תעודה'] }} - {{ visitor['שם מלא'] }}
                     </li>
+                </a>
                 {% endfor %}
             </ul>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

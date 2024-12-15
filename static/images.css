@@ -1,0 +1,15 @@
+/* Image Styles */
+.top-right-image, .lower-right-image {
+    position: fixed;
+    right: 5vw;
+    width: 120px;
+    z-index: 10;
+}
+
+.top-right-image {
+    top: 5vh;
+}
+
+.lower-right-image {
+    top: 20vh;
+}

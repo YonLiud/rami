@@ -1,0 +1,36 @@
+.log-box {
+
+    position: fixed;
+    top: 40vh;
+    right: 5vw;
+    height: 35vh;
+
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--box-shadow-light);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-normal);
+    margin: var(--spacing-medium) 0;
+    padding: var(--spacing-medium);
+    width: 20vw;
+
+    @media (max-width: 1500px) {
+        right: 0vw;
+    }
+}
+
+.log-box table {
+    width: 100%;
+}
+
+.log-box table td {
+    padding: var(--spacing-small);
+
+}
+
+.log-box .button {
+    padding: 0 auto;
+    width: 100%;
+}

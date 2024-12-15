@@ -1,0 +1,17 @@
+footer {
+    background: #1e1e1e;
+    padding: 10px;
+    border-top: 2px solid var(--color-button-bg);
+    color: #bdbdbd;
+    text-align: center;
+    font-size: 14px;
+    z-index: 10;
+    width: 100%;
+
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+}

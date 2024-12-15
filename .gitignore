@@ -1,11 +1,12 @@
-*.xlsx
 .venv*
 *.pyc
-
-*.json
-.vscode/
-
 *pycache*
+
+*.xlsx
+*.json
+*.csv
+
+.vscode/
 
 dist
 build

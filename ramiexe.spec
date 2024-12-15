@@ -8,7 +8,10 @@ a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[('templates', 'templates')],
+    datas=[
+        ('templates', 'templates'),
+        ('static', 'static')
+    ],
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
@@ -32,6 +35,7 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=True,
+    icon='icon.ico',
 )
 coll = COLLECT(
     exe,

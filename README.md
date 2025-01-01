@@ -21,7 +21,7 @@ Rami is a web-based application designed to log the entry and exit of visitors. 
    The executable will be in the `dist` folder
 
 
->[!INFO]
+> [!NOTE]
 > This will generate the executable based on the configuration specified in the ``ramiexe.spec`` file. The output will be placed in the ``dist`` directory.
 
 

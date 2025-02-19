@@ -16,18 +16,26 @@ Rami is a web-based application designed to log the entry and exit of visitors. 
 - Pip
 
 ### Installation
+
+**To build the executable:**
 1. Clone the repository
 2. Run `pip install -r requirements.txt` to install the required packages
-3. Run `pyinstaller ramiexe.spec` to build the executable
-   The executable will be in the `dist` folder
+3. Run `pyinstaller ramiexe.spec` to build the executable  
+   The executable will be located in the `dist` folder.
+
+**OR run the application directly via Python:**
+1. Clone the repository
+2. Run `pip install -r requirements.txt` to install the required packages
+3. Run `py app.py` to start the application.
 
 
 > [!NOTE]
 > This will generate the executable based on the configuration specified in the ``ramiexe.spec`` file. The output will be placed in the ``dist`` directory.
 
 
-> [!WARN]
-> Any excel file must have these 3 rows: ``הדועת רפסמ``, ``אלמ םש`` and ``םינפב``
+> [!WARNING]
+> The Excel file must include these three columns: ``מספר תעודה``, ``שם מלא``, ``בפנים``.  
+> These columns can be modified by changing the rows the application writes to, but the application relies on these three fields. All other columns are optional.
 
 
 ## Routes Map

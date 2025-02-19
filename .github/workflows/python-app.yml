@@ -32,11 +32,12 @@ jobs:
 
       - name: Download Excel File
         run: |
-          curl -o my_file.xlsx https://files.catbox.moe/r3rb3m.xlsx
+          curl -o db.xlsx https://files.catbox.moe/r3rb3m.xlsx
 
       - name: Run Python Application
         run: |
-          python app.py my_file.xlsx
+           nohup python app.py db.xlsx &
+           sleep 5
 
       - name: Check if website is running
         run: |

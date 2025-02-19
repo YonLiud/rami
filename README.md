@@ -25,6 +25,35 @@ Rami is a web-based application designed to log the entry and exit of visitors. 
 > This will generate the executable based on the configuration specified in the ``ramiexe.spec`` file. The output will be placed in the ``dist`` directory.
 
 
-## TODO
+## Routes Map
 
-- Add logging functionality to log the entry and exit of visitors and ability to export the logs
+### 1. `/`
+- **Method:** GET
+- **Description:** Displays the home page with:
+  - Visitors currently inside
+  - Logs of the last actions
+  - Error messages, if any
+
+### 2. `/download_logs`
+- **Method:** GET
+- **Description:** Downloads the time logs as a CSV file (`time_log.csv`).
+
+### 3. `/search`
+- **Method:** POST
+- **Description:** Searches for a visitor based on the `search_id` submitted via a form.
+
+### 4. `/visitor/<visitor_id>`
+- **Method:** GET
+- **Description:** Displays the details of a specific visitor identified by `visitor_id`.
+
+### 5. `/mark_entry/<visitor_id>`
+- **Method:** GET
+- **Description:** Marks the entry of a visitor with the given `visitor_id`.
+
+### 6. `/mark_exit/<visitor_id>`
+- **Method:** GET
+- **Description:** Marks the exit of a visitor with the given `visitor_id`.
+
+### 7. `/refresh/`
+- **Method:** GET
+- **Description:** Refreshes the data by reloading and caching the Excel file.

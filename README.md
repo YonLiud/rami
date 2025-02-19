@@ -7,6 +7,7 @@ Rami is a web-based application designed to log the entry and exit of visitors. 
 - Mark the entry and exit of visitors
 - View a list of current visitors inside
 - Data stored and managed in an Excel file
+- Log and Review all entries and exits with the ability of exporting the logs file
 
 ## Build instructions
 
@@ -23,6 +24,10 @@ Rami is a web-based application designed to log the entry and exit of visitors. 
 
 > [!NOTE]
 > This will generate the executable based on the configuration specified in the ``ramiexe.spec`` file. The output will be placed in the ``dist`` directory.
+
+
+> [!WARN]
+> Any excel file must have these 3 rows: ``הדועת רפסמ``, ``אלמ םש`` and ``םינפב``
 
 
 ## Routes Map

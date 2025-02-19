@@ -19,7 +19,7 @@ def load_and_cache_excel(file_path_i: str):
 
     try:
 
-        excel_data = pd.read_excel(file_path, sheet_name=None)
+        excel_data = pd.read_excel(file_path, sheet_name=None, engine="openpyxl")
 
         cachced_data = {sheet_name: df for sheet_name, df in excel_data.items()}
 

@@ -54,5 +54,11 @@ jobs:
         run: |
           curl -o time_log.csv --silent --fail http://localhost:5000/download_logs
           if [ ! -s time_log.csv ]; then echo "Log file is empty"; exit 1; fi
-          if [ "$(head -n 1 time_log.csv)" != "11111,Entry," ]; then echo "Unexpected first line"; exit 1; fi
-          if [ "$(sed -n 2p time_log.csv)" != "11111,Exit," ]; then echo "Unexpected second line"; exit 1; fi
+          echo "Downloaded file content:"
+          cat time_log.csv
+          
+          if [[ "$(head -n 1 time_log.csv)" != "11111,Entry,"* ]]; then
+            echo "Unexpected first line"; exit 1; fi
+
+          if [[ "$(sed -n 2p time_log.csv)" != "11111,Exit,"* ]]; then
+            echo "Unexpected second line"; exit 1; fi

@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, current_app
 from datetime import datetime
 from . import main_bp
 from services.excel_service import load_and_cache_excel
@@ -16,5 +16,5 @@ def home():
 
 @main_bp.route('/refresh/')
 def route_refresh():
-    load_and_cache_excel()
+    load_and_cache_excel(current_app.config['DATABASE_FILE'])
     return redirect(url_for('main.home', last_updated=datetime.now()))

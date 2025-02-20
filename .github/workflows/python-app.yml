@@ -36,8 +36,11 @@ jobs:
 
       - name: Run Python Application
         run: |
-           nohup python app.py db.xlsx &
-           sleep 5
+          nohup python app.py db.xlsx &
+          until curl --silent --fail http://localhost:5000; do
+            echo "Waiting for Flask to start..."
+            sleep 2
+          done
 
       - name: Check Basic Routes (Home, Refresh)
         run: |

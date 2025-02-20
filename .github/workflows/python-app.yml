@@ -37,25 +37,25 @@ jobs:
       - name: Run Python Application
         run: |
           nohup python app.py db.xlsx &
-          until curl --silent --fail http://localhost:5000; do
+          until curl -s -o /dev/null --fail http://localhost:5000; do
             echo "Waiting for Flask to start..."
             sleep 2
           done
 
       - name: Check Basic Routes (Home, Refresh)
         run: |
-          curl --silent --fail http://localhost:5000
-          curl --silent --fail http://localhost:5000/refresh
+          curl -s -o /dev/null --fail http://localhost:5000
+          curl -s -o /dev/null --fail http://localhost:5000/refresh
 
       - name: Check Search and Visitor Routes
         run: |
-          curl --silent --fail --data "search_id=11111" http://localhost:5000/search
-          curl --silent --fail http://localhost:5000/visitor/11111
+          curl -s -o /dev/null --fail --data "search_id=11111" http://localhost:5000/search
+          curl -s -o /dev/null --fail http://localhost:5000/visitor/11111
 
       - name: Check Mark Entry/Exit Routes
         run: |
-          curl --silent --fail http://localhost:5000/mark_entry/11111
-          curl --silent --fail http://localhost:5000/mark_exit/11111
+          curl -s -o /dev/null --fail http://localhost:5000/mark_entry/11111
+          curl -s -o /dev/null --fail http://localhost:5000/mark_exit/11111
 
 
       

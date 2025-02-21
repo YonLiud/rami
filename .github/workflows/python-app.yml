@@ -71,3 +71,47 @@ jobs:
 
           if [[ "$(sed -n 2p time_log.csv)" != "11111,Exit,"* ]]; then
             echo "Unexpected second line"; exit 1; fi
+  
+  check-build-execution-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
+      - name: Download Excel File
+        run: |
+          curl -o db.xlsx https://files.catbox.moe/r3rb3m.xlsx
+      
+      - name: Build Executable
+        run: |
+          pip install pyinstaller
+          pyinstaller buildrami.spec
+      
+      - name: Run Executable
+        run: |
+          nohup dist\\rami.exe\\rami.exe db.xlsx &
+          until curl -s -o /dev/null --fail http://localhost:5000; do
+            echo "Waiting for Flask to start..."
+            sleep 2
+          done
+
+      - name: Check Basic Routes (Home, Refresh)
+        run: |
+          curl -s -o /dev/null --fail http://localhost:5000
+          curl -s -o /dev/null --fail http://localhost:5000/refresh
+
+      - name: Clean Up
+        run: |
+          rd /s /q dist

@@ -101,11 +101,12 @@ jobs:
       
       - name: Run Executable
         run: |
-          nohup dist\\rami.exe\\rami.exe db.xlsx &
-          until curl -s -o /dev/null --fail http://localhost:5000; do
-            echo "Waiting for Flask to start..."
-            sleep 2
-          done
+          Start-Process -NoNewWindow -FilePath "dist\\rami.exe\\rami.exe" -ArgumentList "db.xlsx"
+          Start-Sleep -Seconds 5
+          while (-not (curl -s -o $null --fail http://localhost:5000)) {
+            Write-Host "Waiting for Flask to start..."
+            Start-Sleep -Seconds 2
+          }
 
       - name: Check Basic Routes (Home, Refresh)
         run: |

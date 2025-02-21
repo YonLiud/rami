@@ -7,6 +7,7 @@ Rami is a web-based application designed to log the entry and exit of visitors. 
 - Mark the entry and exit of visitors
 - View a list of current visitors inside
 - Data stored and managed in an Excel file
+- Log and Review all entries and exits with the ability of exporting the logs file
 
 ## Build instructions
 
@@ -15,16 +16,57 @@ Rami is a web-based application designed to log the entry and exit of visitors. 
 - Pip
 
 ### Installation
+
+**To build the executable:**
 1. Clone the repository
 2. Run `pip install -r requirements.txt` to install the required packages
-3. Run `pyinstaller ramiexe.spec` to build the executable
-   The executable will be in the `dist` folder
+3. Run `pyinstaller ramiexe.spec` to build the executable  
+   The executable will be located in the `dist` folder.
+
+**OR run the application directly via Python:**
+1. Clone the repository
+2. Run `pip install -r requirements.txt` to install the required packages
+3. Run `py app.py` to start the application.
 
 
->[!INFO]
+> [!NOTE]
 > This will generate the executable based on the configuration specified in the ``ramiexe.spec`` file. The output will be placed in the ``dist`` directory.
 
 
-## TODO
+> [!WARNING]
+> The Excel file must include these three columns: ``מספר תעודה``, ``שם מלא``, ``בפנים``.  
+> These columns can be modified by changing the rows the application writes to, but the application relies on these three fields. All other columns are optional.
 
-- Add logging functionality to log the entry and exit of visitors and ability to export the logs
+
+## Routes Map
+
+### 1. `/`
+- **Method:** GET
+- **Description:** Displays the home page with:
+  - Visitors currently inside
+  - Logs of the last actions
+  - Error messages, if any
+
+### 2. `/download_logs`
+- **Method:** GET
+- **Description:** Downloads the time logs as a CSV file (`time_log.csv`).
+
+### 3. `/search`
+- **Method:** POST
+- **Description:** Searches for a visitor based on the `search_id` submitted via a form.
+
+### 4. `/visitor/<visitor_id>`
+- **Method:** GET
+- **Description:** Displays the details of a specific visitor identified by `visitor_id`.
+
+### 5. `/mark_entry/<visitor_id>`
+- **Method:** GET
+- **Description:** Marks the entry of a visitor with the given `visitor_id`.
+
+### 6. `/mark_exit/<visitor_id>`
+- **Method:** GET
+- **Description:** Marks the exit of a visitor with the given `visitor_id`.
+
+### 7. `/refresh/`
+- **Method:** GET
+- **Description:** Refreshes the data by reloading and caching the Excel file.

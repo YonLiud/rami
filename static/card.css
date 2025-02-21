@@ -1,3 +1,4 @@
+/* Card Styles */
 .card {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-medium);
@@ -23,10 +24,28 @@
 
 .card-footer {
     text-align: right;
+    padding-top: var(--spacing-medium);
+}
+
+.card-footer a.button {
+    background-color: var(--color-button-bg);
+    color: var(--color-text-primary);
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: var(--radius-small);
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.card-footer a.button:hover {
+    background-color: var(--color-button-hover);
+    transform: scale(1.05);
 }
 
 .card-footer a {
     margin-left: var(--spacing-small);
+    text-align: center;
 }
 
 .card table {

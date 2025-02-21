@@ -45,11 +45,12 @@
             </div>
             <ul class="child-list">
                 {% for visitor in visitors %}
-                <a href="/visitor/{{ visitor['מספר תעודה'] }}">
                     <li class="child-item">
-                        {{ visitor['מספר תעודה'] }} - {{ visitor['שם מלא'] }}
+                        <a href="/visitor/{{ visitor['מספר תעודה'] }}">
+                            {{ visitor['מספר תעודה'] }} - {{ visitor['שם מלא'] }}
+                        </a>
+                        <a class="exit-button" href="/mark_exit/{{ visitor['מספר תעודה'] }}">Exit</a>
                     </li>
-                </a>
                 {% endfor %}
             </ul>
         </li>

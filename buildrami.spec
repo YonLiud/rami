@@ -1,17 +1,35 @@
-# ramiexe.spec
-
-# -*- mode: python ; coding: utf-8 -*-
+import sys
+import os
+from PyInstaller.utils.hooks import collect_all
 
 block_cipher = None
+
+platform = os.environ.get('PLATFORM', 'win32')
+
+if platform == "win32":
+    exe_name = "rami.exe"
+    console = True
+    icon_file = "icon.ico"
+elif platform == "linux":
+    #TODO Finish linux build, currently not working
+    exe_name = "rami"
+    console = True
+    icon_file = None
+else:
+    raise ValueError("Unknown platform specified. Use 'win32' or 'linux'.")
+
+datas = [
+    ('templates', 'templates'),
+    ('routes', 'routes'),
+    ('services', 'services'),
+    ('static', 'static'),
+]
 
 a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[
-        ('templates', 'templates'),
-        ('static', 'static')
-    ],
+    datas=datas,
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
@@ -20,6 +38,7 @@ a = Analysis(
     win_private_assemblies=False,
     cipher=block_cipher,
 )
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
@@ -27,16 +46,17 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='rami',
+    name=exe_name,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,
-    icon='icon.ico',
+    console=console,
+    icon=icon_file,
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
@@ -45,5 +65,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='rami',
+    name=exe_name,
 )

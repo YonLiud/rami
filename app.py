@@ -7,6 +7,10 @@ from services.excel_service import load_and_cache_excel
 app = Flask(__name__)
 app.config['DATABASE_FILE'] = None
 
+@app.route('/favicon.ico')
+def favicon():
+    return Flask.send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 app.register_blueprint(main_bp, url_prefix='/')
 if __name__ == '__main__':
     if not app.config['DATABASE_FILE']:

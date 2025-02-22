@@ -30,7 +30,7 @@ jobs:
           pip install flake8 pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Download Excel File
+      - name: Download Demo Excel File
         run: |
           curl -o db.xlsx https://files.catbox.moe/r3rb3m.xlsx
 
@@ -72,7 +72,7 @@ jobs:
           if [[ "$(sed -n 2p time_log.csv)" != "11111,Exit,"* ]]; then
             echo "Unexpected second line"; exit 1; fi
   
-  Build-Windows-Exe:
+  Build-Windows-Executable:
     runs-on: windows-latest
 
     steps:
@@ -90,22 +90,23 @@ jobs:
           pip install pyinstaller
           if (Test-Path "requirements.txt") { pip install -r requirements.txt }
 
-      - name: Build Windows Executable
+      - name: Build Executable
         run: |
           pyinstaller buildrami.spec
           if (-not (Test-Path "dist")) { exit 1 }
           if (-not (Test-Path "dist\\rami\\rami.exe")) { exit 1 }
 
-      - name: Download Excel File
+      - name: Download Demo Excel File
         run: |
           Invoke-WebRequest -Uri "https://files.catbox.moe/r3rb3m.xlsx" -OutFile "db.xlsx"
       
       - name: Run Windows Executable
         run: |
-          Start-Job -ScriptBlock {
+          Start-Job -Name "Rami-Server" -ScriptBlock {
               Start-Process -FilePath "dist\\rami\\rami.exe" -ArgumentList "db.xlsx" -NoNewWindow
           }
-          Start-Sleep -Seconds 10
+          Write-Output "Waiting for Flask to start..."
+          Start-Sleep -Seconds 5
       - name: Check Web Request
         run: |
           $response = Invoke-WebRequest -Uri "http://localhost:5000" -UseBasicParsing -Method Head -ErrorAction SilentlyContinue

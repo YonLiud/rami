@@ -17,6 +17,7 @@ def get_5_last_logs():
             with open("time_log.csv", "r") as log_file:
                 logs_raw = log_file.readlines()[-5:]
                 logs = [log.strip().split(",") for log in logs_raw]
+                logs = [[log[0], log[1], log[2].split()[1]] for log in logs]
     except Exception as e:
         print(f"Error getting logs: {e}")
         raise e

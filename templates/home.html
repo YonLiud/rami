@@ -33,7 +33,7 @@
             {% endfor %}
         </table>
     </ul>
-    <a href="/download_logs" class="button">Download File</a>
+    <a href="/download_logs" class="button">Download Logs</a>
 </div>
 
 <h2>אורחים בפנים</h2>
@@ -46,8 +46,8 @@
             <ul class="child-list">
                 {% for visitor in visitors %}
                     <li class="child-item">
-                        <a href="/visitor/{{ visitor['מספר תעודה'] }}">
-                            {{ visitor['מספר תעודה'] }} - {{ visitor['שם מלא'] }}
+                        <a class="visitor-link" href="/visitor/{{ visitor['מספר תעודה'] }}">
+                            <span>{{ visitor['מספר תעודה'] }} - {{ visitor['שם מלא'] }}</span>
                         </a>
                         <a class="exit-button" href="/mark_exit/{{ visitor['מספר תעודה'] }}">Exit</a>
                     </li>

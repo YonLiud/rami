@@ -9,6 +9,8 @@
     border-radius: var(--radius-large);
     box-shadow: var(--box-shadow-strong);
     overflow: hidden;
+
+    padding-bottom: 8vh;
 }
 
 .parent-item {

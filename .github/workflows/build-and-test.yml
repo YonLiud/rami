@@ -95,10 +95,14 @@ jobs:
           pyinstaller buildrami.spec
           if (-not (Test-Path "dist")) { exit 1 }
           if (-not (Test-Path "dist\\rami.exe\\rami.exe")) { exit 1 }
+
+      - name: Download Excel File
+        run: |
+          Invoke-WebRequest -Uri "https://files.catbox.moe/r3rb3m.xlsx" -OutFile "db.xlsx"
       
       - name: Run Windows Executable
         run: |
-          Start-Process -FilePath "dist\\rami.exe\\rami.exe" -NoNewWindow | Out-Null
+          Start-Process -FilePath "dist\\rami.exe\\rami.exe" -ArgumentList "db.xlsx" -NoNewWindow | Out-Null
           Start-Sleep -Seconds 10
       - name: Check Web Request
         run: |

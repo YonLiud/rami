@@ -14,10 +14,10 @@
     font-size: var(--font-size-normal);
     margin: var(--spacing-medium) 0;
     padding: var(--spacing-medium);
-    width: 20vw;
+    width: 15vw;
 
-    @media (max-width: 1500px) {
-        right: 0vw;
+    @media (max-width: 1650px) {
+        visibility: hidden;
     }
 }
 
@@ -33,4 +33,11 @@
 .log-box .button {
     padding: 0 auto;
     width: 100%;
+    @media screen and (max-width: 1650px) {
+        visibility: visible;
+        position: fixed;
+        top: 40vh;
+        right: 5vw;
+        width: 10vh;
+    }
 }

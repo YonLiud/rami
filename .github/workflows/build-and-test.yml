@@ -94,7 +94,7 @@ jobs:
         run: |
           pyinstaller buildrami.spec
           if (-not (Test-Path "dist")) { exit 1 }
-          if (-not (Test-Path "dist\\rami.exe\\rami.exe")) { exit 1 }
+          if (-not (Test-Path "dist\\rami\\rami.exe")) { exit 1 }
 
       - name: Download Excel File
         run: |

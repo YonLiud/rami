@@ -1,6 +1,7 @@
 .venv*
 *.pyc
 *pycache*
+*package*
 
 *.xlsx
 *.json

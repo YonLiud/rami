@@ -102,7 +102,9 @@ jobs:
       
       - name: Run Windows Executable
         run: |
-          Start-Process -FilePath "dist\\rami.exe\\rami.exe" -ArgumentList "db.xlsx" -NoNewWindow | Out-Null
+          Start-Job -ScriptBlock {
+              Start-Process -FilePath "dist\\rami\\rami.exe" -ArgumentList "db.xlsx" -NoNewWindow
+          }
           Start-Sleep -Seconds 10
       - name: Check Web Request
         run: |

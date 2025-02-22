@@ -1,4 +1,4 @@
-name: Python Application CI
+name: Rami CI
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  Run-Python:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +30,7 @@ jobs:
           pip install flake8 pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Download Excel File
+      - name: Download Demo Excel File
         run: |
           curl -o db.xlsx https://files.catbox.moe/r3rb3m.xlsx
 
@@ -71,3 +71,43 @@ jobs:
 
           if [[ "$(sed -n 2p time_log.csv)" != "11111,Exit,"* ]]; then
             echo "Unexpected second line"; exit 1; fi
+  
+  Build-Windows-Executable:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          if (Test-Path "requirements.txt") { pip install -r requirements.txt }
+
+      - name: Build Executable
+        run: |
+          pyinstaller buildrami.spec
+          if (-not (Test-Path "dist")) { exit 1 }
+          if (-not (Test-Path "dist\\rami\\rami.exe")) { exit 1 }
+
+      - name: Download Demo Excel File
+        run: |
+          Invoke-WebRequest -Uri "https://files.catbox.moe/r3rb3m.xlsx" -OutFile "db.xlsx"
+      
+      - name: Run Windows Executable
+        run: |
+          Start-Job -Name "Rami-Server" -ScriptBlock {
+              Start-Process -FilePath "dist\\rami\\rami.exe" -ArgumentList "db.xlsx" -NoNewWindow
+          }
+          Write-Output "Waiting for Flask to start..."
+          Start-Sleep -Seconds 5
+      - name: Check Web Request
+        run: |
+          $response = Invoke-WebRequest -Uri "http://localhost:5000" -UseBasicParsing -Method Head -ErrorAction SilentlyContinue
+          if ($response.StatusCode -ne 200) { exit 1 }

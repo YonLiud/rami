@@ -1,4 +1,4 @@
-name: Python Application CI
+name: Rami CI
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  Run-Python:
     runs-on: ubuntu-latest
 
     steps:
